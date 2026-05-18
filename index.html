@@ -949,7 +949,7 @@
 
   /* ───── BEHIND THE SCENES ───── */
   .behind-scenes {
-    background: var(--cream);
+    background: var(--beige);
   }
   .behind-scenes-grid {
     display: grid;
@@ -1552,45 +1552,6 @@
     .basket-form-grid { grid-template-columns: 1fr; }
   }
 
-  /* ───── BRAND STRIP ───── */
-  .brand-strip {
-    position: relative;
-    height: clamp(360px, 55vw, 560px);
-    overflow: hidden;
-  }
-  .brand-strip img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    opacity: 1;
-    display: block;
-  }
-  .brand-strip-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(31, 26, 20, 0) 0%, rgba(31, 26, 20, 0.18) 45%, rgba(31, 26, 20, 0.42) 100%);
-    pointer-events: none;
-  }
-  .brand-strip-text {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: var(--cream);
-    padding: 0 24px;
-  }
-  .brand-strip-text em {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: clamp(26px, 4vw, 44px);
-    line-height: 1.25;
-    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
-    font-weight: 400;
-  }
-
   /* ───── REVEAL ANIMATION ───── */
   .reveal {
     opacity: 0;
@@ -1895,14 +1856,6 @@
         <video src="assets/Matcha_3.mp4" autoplay muted loop playsinline></video>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="brand-strip" aria-label="Hart Bageri coffee">
-  <img src="assets/Cups.png" alt="Hart Bageri coffee cups" />
-  <div class="brand-strip-overlay"></div>
-  <div class="brand-strip-text">
-    <em>Coffee, ready when you are.</em>
   </div>
 </section>
 

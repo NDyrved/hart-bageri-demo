@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Hart Bageri — Baked with soul. Made for Copenhagen.</title>
-<meta name="description" content="Hart Bageri is a Copenhagen bakery serving sourdough bread, pastries, croissants, cakes and coffee. Open daily 07:30–18:00 in Copenhagen V." />
+<meta name="description" content="Hart Bageri is a Copenhagen bakery serving sourdough bread, pastries, croissants, cakes and coffee. Twelve locations across Copenhagen and Frederiksberg, open daily from 07:30." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -796,8 +796,11 @@
   /* spans */
   .span-2-cols { grid-column: span 2; }
   .span-3-cols { grid-column: span 3; }
+  .span-4-cols { grid-column: span 4; }
   .span-full { grid-column: 1 / -1; }
   .span-2-rows { grid-row: span 2; }
+  .span-3-rows { grid-row: span 3; }
+  .gallery-item-video video { object-fit: cover; background: var(--ink); }
 
   @media (max-width: 880px) {
     .gallery-grid {
@@ -865,14 +868,14 @@
     aspect-ratio: 9/16;
     border-radius: 6px;
     overflow: hidden;
-    background: var(--beige);
+    background: var(--ink);
     box-shadow: 0 20px 50px -20px rgba(141, 103, 38, 0.3);
     position: relative;
   }
   .matcha-item video {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
   }
   @media (max-width: 760px) {
@@ -941,6 +944,192 @@
     .location-btn { padding: 18px 16px; font-size: 20px; }
   }
 
+  /* ───── PRE-ORDER ───── */
+  .preorder { background: var(--white); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .preorder-step-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold-dark);
+    font-weight: 600;
+    margin-bottom: 22px;
+    text-align: center;
+  }
+  .preorder-locations {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 940px;
+    margin: 0 auto;
+  }
+  .preorder-loc-btn {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 20px 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+  .preorder-loc-btn:hover {
+    background: var(--beige);
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(141, 103, 38, 0.16);
+  }
+  @media (max-width: 880px) {
+    .preorder-locations { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .preorder-locations { grid-template-columns: 1fr; }
+  }
+
+  .preorder-selected-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 22px 28px;
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .preorder-selected-label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .preorder-selected-bar strong {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .preorder-change-btn {
+    background: transparent;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  .preorder-change-btn:hover {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .preorder-categories {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  .preorder-cat-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    padding: 12px 22px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .preorder-cat-btn:hover {
+    border-color: var(--gold-dark);
+    color: var(--gold-dark);
+  }
+  .preorder-cat-btn.active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  .preorder-products {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 880px) {
+    .preorder-products { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .preorder-products { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  }
+  .product-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 18px;
+    text-align: center;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px -12px rgba(141, 103, 38, 0.2);
+    border-color: var(--gold);
+  }
+  .product-card-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: var(--cream);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    padding: 8px;
+  }
+  .product-card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.25;
+    margin-top: auto;
+  }
+
+  .preorder-action {
+    margin-top: 50px;
+    text-align: center;
+    padding: 36px 24px 8px;
+    border-top: 1px solid var(--line);
+  }
+  .preorder-action p {
+    color: var(--ink-soft);
+    font-size: 16px;
+    margin-bottom: 22px;
+  }
+
   /* ───── BRAND STRIP ───── */
   .brand-strip {
     position: relative;
@@ -1002,6 +1191,7 @@
       <a href="#services">Bakery</a>
       <a href="#about">About</a>
       <a href="#gallery">Gallery</a>
+      <a href="#preorder">Pre-order</a>
       <a href="#visit">Visit</a>
       <a href="tel:+4531111850" class="nav-cta">Call Us</a>
     </div>
@@ -1014,14 +1204,14 @@
   </video>
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <div class="eyebrow reveal">Copenhagen V · Est. Bakery</div>
+    <div class="eyebrow reveal">Copenhagen / Frederiksberg · Est. Bakery</div>
     <h1 class="hero-logo reveal">
       <img src="assets/Hart_bageri_curved_text_white.png" alt="Hart Bageri" />
     </h1>
     <p class="hero-tagline reveal">Baked with soul. Made for Copenhagen.</p>
 
     <div class="cta-row reveal">
-      <a href="https://maps.app.goo.gl/EW3BPFqjSyoH6bUg9" target="_blank" rel="noopener" class="btn btn-primary">
+      <a href="#visit" class="btn btn-primary">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
         Visit Us
       </a>
@@ -1030,12 +1220,8 @@
 
     <div class="hero-meta reveal">
       <div class="meta-item">
-        <span class="meta-label">Open Daily</span>
-        <span class="meta-value">07:30 – 18:00</span>
-      </div>
-      <div class="meta-item">
         <span class="meta-label">Find Us</span>
-        <span class="meta-value">Copenhagen V</span>
+        <span class="meta-value">Copenhagen / Frederiksberg</span>
       </div>
     </div>
   </div>
@@ -1045,7 +1231,7 @@
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow">The Bakery</div>
-      <h2>Everything baked <span class="accent">in-house</span></h2>
+      <h2>Everything made <span class="accent">in-house</span></h2>
       <p>A small, focused menu — made carefully each day with simple ingredients and time-honoured technique.</p>
     </div>
 
@@ -1092,10 +1278,10 @@
 
       <div class="service-card reveal">
         <div class="service-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="6" width="16" height="14" rx="2"/><path d="M8 3v6M16 3v6M4 11h16"/><path d="M9 15h6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3c-4 4-6 8-6 12a6 6 0 0012 0c0-4-2-8-6-12z"/><path d="M12 9v12"/><path d="M9 14l3-2 3 2"/></svg>
         </div>
-        <h3>Pre-Orders</h3>
-        <p>Reserve loaves, pastries, or whole cakes ahead of time. Call us and we'll set them aside for you.</p>
+        <h3>Matcha</h3>
+        <p>Stone-ground matcha worked into pastries, drinks and seasonal bakes — a small green ritual.</p>
       </div>
     </div>
   </div>
@@ -1109,7 +1295,7 @@
       </div>
       <div class="about-text reveal">
         <div class="eyebrow">About Hart Bageri</div>
-        <h2>A neighbourhood bakery in <span class="accent">Copenhagen V</span></h2>
+        <h2>A neighbourhood bakery in <span class="accent">Copenhagen</span></h2>
         <p>That pursuit lives in the small things. The slow ferment of every sourdough loaf. The careful lamination of each croissant. The quiet attention behind every cup of coffee we pour.</p>
         <p>Step inside and we hope it feels like a part of your day, not a stop along it. A loaf for dinner, a pastry between meetings, a cake for the weekend — made well, made here, made for the neighbourhood.</p>
       </div>
@@ -1162,24 +1348,23 @@
         <img src="assets/Banana_cake_1.jpg" alt="Banana cake at Hart Bageri" loading="lazy" />
         <div class="gallery-caption">Banana cake</div>
       </div>
-      <div class="gallery-item span-3-cols reveal">
+      <div class="gallery-item reveal">
         <img src="assets/Apricot_Image.jpg" alt="Apricot pastry" loading="lazy" />
-        <div class="gallery-caption">Apricot pastry</div>
+        <div class="gallery-caption">Apricot</div>
       </div>
-      <div class="gallery-item span-2-cols reveal">
+      <div class="gallery-item gallery-item-video span-2-cols span-3-rows reveal">
+        <video src="assets/Banana_cake_video_1.mp4" autoplay muted loop playsinline></video>
+        <div class="gallery-caption">In the kitchen</div>
+      </div>
+      <div class="gallery-item reveal">
         <img src="assets/Hveder_Image.jpg" alt="Hveder buns" loading="lazy" />
         <div class="gallery-caption">Hveder</div>
       </div>
-      <div class="gallery-item reveal">
+      <div class="gallery-item span-4-cols reveal">
         <img src="assets/Rasberry_Cupcake.jpg" alt="Raspberry cupcake" loading="lazy" />
         <div class="gallery-caption">Raspberry</div>
       </div>
     </div>
-
-    <figure class="gallery-video reveal">
-      <video src="assets/Banana_cake_video_1.mp4" autoplay muted loop playsinline></video>
-      <figcaption>In the kitchen</figcaption>
-    </figure>
   </div>
 </section>
 
@@ -1204,6 +1389,63 @@
   </div>
 </section>
 
+<section class="preorder" id="preorder">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Pre-order</div>
+      <h2>Reserve <span class="accent">in advance</span></h2>
+      <p>Pick your bakery and choose what you'd like — we'll set it aside for pickup.</p>
+    </div>
+
+    <div id="preorder-step1" class="preorder-stage">
+      <div class="preorder-step-label">1 · Choose your bakery</div>
+      <div class="preorder-locations reveal">
+        <button type="button" class="preorder-loc-btn" data-loc="0">Carlsberg Byen</button>
+        <button type="button" class="preorder-loc-btn" data-loc="1">Frederiksberg</button>
+        <button type="button" class="preorder-loc-btn" data-loc="2">Gammel Mønt</button>
+        <button type="button" class="preorder-loc-btn" data-loc="3">Holmen</button>
+        <button type="button" class="preorder-loc-btn" data-loc="4">Islands Brygge</button>
+        <button type="button" class="preorder-loc-btn" data-loc="5">Istedgade</button>
+        <button type="button" class="preorder-loc-btn" data-loc="6">Kødbyen</button>
+        <button type="button" class="preorder-loc-btn" data-loc="7">Marmorkirken</button>
+        <button type="button" class="preorder-loc-btn" data-loc="8">Ravnsborggade</button>
+        <button type="button" class="preorder-loc-btn" data-loc="9">Refshalevej</button>
+        <button type="button" class="preorder-loc-btn" data-loc="10">Stefansgade</button>
+        <button type="button" class="preorder-loc-btn" data-loc="11">Østerbro</button>
+      </div>
+    </div>
+
+    <div id="preorder-step2" class="preorder-stage" hidden>
+      <div class="preorder-selected-bar">
+        <div>
+          <span class="preorder-selected-label">Picking up at</span>
+          <strong id="preorder-selected-name">Hart Bageri</strong>
+        </div>
+        <button type="button" class="preorder-change-btn" id="preorder-change">Change bakery</button>
+      </div>
+
+      <div class="preorder-categories">
+        <button type="button" class="preorder-cat-btn active" data-cat="bread-and-buns">Bread &amp; Buns</button>
+        <button type="button" class="preorder-cat-btn" data-cat="pastry-and-cake">Pastry &amp; Cake</button>
+        <button type="button" class="preorder-cat-btn" data-cat="lunch-and-savory">Lunch &amp; Savory</button>
+        <button type="button" class="preorder-cat-btn" data-cat="groceries">Groceries</button>
+      </div>
+
+      <div id="preorder-products" class="preorder-products">
+        <!-- product cards rendered by JS -->
+      </div>
+
+      <div class="preorder-action">
+        <p>Call your bakery to confirm your pre-order.</p>
+        <a id="preorder-call" class="btn btn-primary" href="tel:+4531111850">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+          Call to pre-order
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="location" id="visit">
   <div class="container">
     <div class="section-head reveal">
@@ -1213,18 +1455,18 @@
     </div>
 
     <div id="location-list" class="location-list reveal">
-      <button class="location-btn" data-loc="0">Carlsberg Byen</button>
-      <button class="location-btn" data-loc="1">Frederiksberg</button>
-      <button class="location-btn" data-loc="2">Gammel Mønt</button>
-      <button class="location-btn" data-loc="3">Holmen</button>
-      <button class="location-btn" data-loc="4">Islands Brygge</button>
-      <button class="location-btn" data-loc="5">Istedgade</button>
-      <button class="location-btn" data-loc="6">Kødbyen</button>
-      <button class="location-btn" data-loc="7">Marmorkirken</button>
-      <button class="location-btn" data-loc="8">Ravnsborggade</button>
-      <button class="location-btn" data-loc="9">Refshalevej</button>
-      <button class="location-btn" data-loc="10">Stefansgade</button>
-      <button class="location-btn" data-loc="11">Østerbro</button>
+      <button type="button" class="location-btn" data-loc="0">Carlsberg Byen</button>
+      <button type="button" class="location-btn" data-loc="1">Frederiksberg</button>
+      <button type="button" class="location-btn" data-loc="2">Gammel Mønt</button>
+      <button type="button" class="location-btn" data-loc="3">Holmen</button>
+      <button type="button" class="location-btn" data-loc="4">Islands Brygge</button>
+      <button type="button" class="location-btn" data-loc="5">Istedgade</button>
+      <button type="button" class="location-btn" data-loc="6">Kødbyen</button>
+      <button type="button" class="location-btn" data-loc="7">Marmorkirken</button>
+      <button type="button" class="location-btn" data-loc="8">Ravnsborggade</button>
+      <button type="button" class="location-btn" data-loc="9">Refshalevej</button>
+      <button type="button" class="location-btn" data-loc="10">Stefansgade</button>
+      <button type="button" class="location-btn" data-loc="11">Østerbro</button>
     </div>
 
     <div id="location-detail" class="location-detail" hidden>
@@ -1284,42 +1526,6 @@
   <div class="brand-strip-overlay"></div>
   <div class="brand-strip-text">
     <em>Coffee, ready when you are.</em>
-  </div>
-</section>
-
-<section class="contact" id="contact">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="eyebrow">Get in Touch</div>
-      <h2>One quick call <span class="accent">— that's all.</span></h2>
-      <p class="contact-sub">Reserve a loaf, ask about a cake, or just check what's in the case today.</p>
-    </div>
-
-    <div class="contact-actions">
-      <a href="tel:+4531111850" class="contact-card reveal">
-        <div class="contact-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
-        </div>
-        <div class="label">Call Us</div>
-        <div class="value">+45 31 11 18 50</div>
-      </a>
-
-      <a href="mailto:info@hartbageri.com" class="contact-card reveal">
-        <div class="contact-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        </div>
-        <div class="label">Email</div>
-        <div class="value">info@hartbageri.com</div>
-      </a>
-
-      <a href="#visit" class="contact-card reveal">
-        <div class="contact-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        </div>
-        <div class="label">Visit</div>
-        <div class="value">12 bakeries in Copenhagen</div>
-      </a>
-    </div>
   </div>
 </section>
 
@@ -1421,6 +1627,94 @@
     locDetail.hidden = true;
     locList.hidden = false;
     document.getElementById('visit').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // Pre-order
+  const products = {
+    'bread-and-buns': [
+      { name: 'Bun',                          img: 'Bun.PNG' },
+      { name: 'Bun with butter and cheese',   img: 'Bun_with_butter_and_cheese.PNG' },
+      { name: 'City Loaf',                    img: 'City_Loaf.PNG' },
+      { name: 'Everyday Rye',                 img: 'Everyday_Rye.PNG' },
+      { name: 'Sesame City Loaf',             img: 'Sesame_City_Loaf.PNG' },
+      { name: 'Superseed',                    img: 'Superseed.PNG' },
+    ],
+    'pastry-and-cake': [
+      { name: 'Cardamom Croissant',           img: 'Cardamom_Croissant.PNG' },
+      { name: 'Chocolate Chip Cookie',        img: 'Chocolate_Chip_Cookie.PNG' },
+      { name: 'Croissant',                    img: 'Croissant.PNG' },
+      { name: 'Large Cheesecake',             img: 'Large_Cheesecake.PNG' },
+      { name: 'Pain au Chocolat',             img: 'Pain_au_Chocolat.PNG' },
+      { name: 'Spandauer',                    img: 'Spandauer.PNG' },
+    ],
+    'lunch-and-savory': [
+      { name: 'Sausage Roll',                 img: 'Sausage_Roll.PNG' },
+    ],
+    'groceries': [
+      { name: 'Bornholm Water',               img: 'Bornholm_Water.PNG' },
+      { name: 'Butter from Øllingegaard',     img: 'Butter_from_Øllingegaard.PNG' },
+      { name: 'Cocio',                        img: 'Cocio.PNG' },
+      { name: 'Earl Grey Tea',                img: 'Earl_Grey_Tea.PNG' },
+      { name: 'Ebeltoft Soda Ginger & Lemon', img: 'Ebeltoft_Soda_Ginger_&_Lemon.PNG' },
+      { name: 'Ebeltoft Soda Raspberry',      img: 'Ebeltoft_Soda_Raspberry.PNG' },
+      { name: 'Ebeltoft Soda Rhubarb',        img: 'Ebeltoft_Soda_Rhubarb.PNG' },
+      { name: 'Fritz Cola',                   img: 'Fritz_Cola.PNG' },
+      { name: 'Jam (London Borough of Jam)',  img: 'Jam_London_Borough_of_Jam.PNG' },
+      { name: 'Speedy Breakfast Tea',         img: 'Speedy_Breakfast_Tea.PNG' },
+      { name: 'Spring Water',                 img: 'Spring_water.PNG' },
+      { name: 'Wild Rooibos Tea',             img: 'Wild_Rooibos_Tea.PNG' },
+    ],
+  };
+
+  const preStep1 = document.getElementById('preorder-step1');
+  const preStep2 = document.getElementById('preorder-step2');
+  const preName  = document.getElementById('preorder-selected-name');
+  const preCall  = document.getElementById('preorder-call');
+  const preGrid  = document.getElementById('preorder-products');
+
+  function escapeHTML(s) {
+    return s.replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  }
+
+  function renderProducts(category) {
+    const items = products[category] || [];
+    preGrid.innerHTML = items.map(p => `
+      <article class="product-card">
+        <div class="product-card-img">
+          <img src="assets/preorder/${category}/${encodeURIComponent(p.img)}" alt="${escapeHTML(p.name)}" loading="lazy" />
+        </div>
+        <div class="product-card-name">${escapeHTML(p.name)}</div>
+      </article>
+    `).join('');
+  }
+
+  let currentCategory = 'bread-and-buns';
+  document.querySelectorAll('.preorder-cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.preorder-cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCategory = btn.dataset.cat;
+      renderProducts(currentCategory);
+    });
+  });
+
+  document.querySelectorAll('.preorder-loc-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const loc = locations[parseInt(btn.dataset.loc, 10)];
+      if (!loc) return;
+      preName.textContent = 'Hart Bageri · ' + loc.name;
+      preCall.href = 'tel:' + loc.phone.replace(/\s/g, '');
+      preStep1.hidden = true;
+      preStep2.hidden = false;
+      renderProducts(currentCategory);
+      document.getElementById('preorder').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  document.getElementById('preorder-change').addEventListener('click', () => {
+    preStep2.hidden = true;
+    preStep1.hidden = false;
+    document.getElementById('preorder').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   // Reveal on scroll

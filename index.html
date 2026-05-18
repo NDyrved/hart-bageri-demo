@@ -958,19 +958,39 @@
   }
   .behind-scenes-item {
     position: relative;
-    aspect-ratio: 16/9;
+    aspect-ratio: 9/16;
+    max-width: 360px;
+    margin: 0 auto;
     border-radius: 6px;
     overflow: hidden;
-    background: var(--ink);
-    box-shadow: 0 24px 60px -20px rgba(31, 26, 20, 0.28);
-    margin: 0;
+    background: transparent;
   }
   .behind-scenes-item video {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
+    cursor: pointer;
   }
+  .behind-scenes-sound {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(31, 26, 20, 0.55);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    z-index: 3;
+  }
+  .behind-scenes-item:hover .behind-scenes-sound { opacity: 1; }
+  .behind-scenes-sound svg { width: 18px; height: 18px; }
   .behind-scenes-item::after {
     content: "";
     position: absolute;
@@ -1802,22 +1822,22 @@
       <div class="why-card reveal">
         <div class="why-num">I</div>
         <h3>Baked Fresh</h3>
-        <p>Everything we sell is baked in-house the same day, every day of the week.</p>
+        <p>Everything we sell is baked in-house the same day, with care and a short list of trusted ingredients.</p>
       </div>
       <div class="why-card reveal">
         <div class="why-num">II</div>
         <h3>Open Daily</h3>
-        <p>Seven days a week, from 07:30 to 18:00. Come in whenever the day suits.</p>
+        <p>Open seven days a week — opening hours vary slightly by bakery, so check your nearest shop.</p>
       </div>
       <div class="why-card reveal">
         <div class="why-num">III</div>
         <h3>Pre-Orders Welcome</h3>
-        <p>Reserve bread, pastries, or whole cakes ahead — call and we'll set them aside.</p>
+        <p>Reserve bread, pastries, or whole cakes ahead through the pre-order section, and we'll set them aside.</p>
       </div>
       <div class="why-card reveal">
         <div class="why-num">IV</div>
         <h3>In the Neighbourhood</h3>
-        <p>Right in Copenhagen V, easy to walk to and easy to call when you need us.</p>
+        <p>Twelve bakeries across Copenhagen / Frederiksberg — easy to walk to, easy to call when you need us.</p>
       </div>
     </div>
   </div>
@@ -1886,11 +1906,17 @@
     </div>
     <div class="behind-scenes-grid">
       <figure class="behind-scenes-item reveal">
-        <video src="assets/Focaccia_video.mp4" autoplay muted loop playsinline></video>
+        <video src="assets/Focaccia_video.mp4" autoplay muted loop playsinline title="Tap to unmute"></video>
+        <span class="behind-scenes-sound" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        </span>
         <figcaption>Focaccia</figcaption>
       </figure>
       <figure class="behind-scenes-item reveal">
-        <video src="assets/Superseed_bread_video.mp4" autoplay muted loop playsinline></video>
+        <video src="assets/Superseed_bread_video.mp4" autoplay muted loop playsinline title="Tap to unmute"></video>
+        <span class="behind-scenes-sound" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        </span>
         <figcaption>Superseed bread</figcaption>
       </figure>
     </div>
@@ -2033,6 +2059,23 @@
 </aside>
 
 <script>
+  // Behind the scenes — click a video to toggle sound
+  document.querySelectorAll('.behind-scenes-item').forEach(item => {
+    const vid = item.querySelector('video');
+    const icon = item.querySelector('.behind-scenes-sound svg');
+    const mutedPaths = '<path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+    const onPaths    = '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/>';
+    vid.addEventListener('click', () => {
+      vid.muted = !vid.muted;
+      if (!vid.muted) {
+        vid.play().catch(() => {});
+        if (icon) icon.innerHTML = onPaths;
+      } else if (icon) {
+        icon.innerHTML = mutedPaths;
+      }
+    });
+  });
+
   // FAQ accordion
   document.querySelectorAll('.faq-q').forEach(btn => {
     btn.addEventListener('click', () => {

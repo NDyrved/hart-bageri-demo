@@ -883,9 +883,6 @@
   }
 
   /* ───── LOCATION SWITCHER ───── */
-  .location-stage { display: none; }
-  .location-stage.is-active { display: block; }
-
   .location-list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1554,12 +1551,12 @@
 </nav>
 
 <header class="hero" id="top">
-  <video class="hero-video" autoplay muted loop playsinline poster="assets/Apricot_Image.jpg">
-    <source src="assets/Apricot_Video.mp4" type="video/mp4">
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="assets/Hero_dough_sequence.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <div class="eyebrow reveal">Copenhagen / Frederiksberg · Est. Bakery</div>
+    <div class="eyebrow reveal">Copenhagen / Frederiksberg · Est. 2018</div>
     <h1 class="hero-logo reveal">
       <img src="assets/Hart_bageri_curved_text_white.png" alt="Hart Bageri" />
     </h1>
@@ -1809,7 +1806,7 @@
       <p>Twelve bakeries across Copenhagen — pick the one nearest you.</p>
     </div>
 
-    <div id="location-step1" class="location-stage is-active">
+    <div id="location-step1">
       <div class="location-list reveal">
         <button type="button" class="location-btn" data-loc="0">Carlsberg Byen</button>
         <button type="button" class="location-btn" data-loc="1">Frederiksberg</button>
@@ -1826,7 +1823,7 @@
       </div>
     </div>
 
-    <div id="location-step2" class="location-stage">
+    <div id="location-step2" hidden>
       <button type="button" class="location-back" id="location-back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         All locations
@@ -1965,7 +1962,7 @@
       <label>First name<input type="text" name="fname" required /></label>
       <label>Last name<input type="text" name="lname" required /></label>
       <label>Phone<input type="tel" name="phone" required /></label>
-      <label>Company <span class="optional">(optional)</span><input type="text" name="company" /></label>
+      <label><span>Company <span class="optional">(optional)</span></span><input type="text" name="company" /></label>
       <label class="basket-form-grid-full">Email<input type="email" name="email" required /></label>
       <label class="basket-form-grid-full">Confirm email<input type="email" name="email2" required /></label>
     </div>
@@ -2003,70 +2000,68 @@
   const locStep1 = document.getElementById('location-step1');
   const locStep2 = document.getElementById('location-step2');
 
-  function showLocation(i) {
-    const loc = locations[i];
-    if (!loc) return;
-    document.getElementById('loc-name').textContent = 'Hart Bageri · ' + loc.name;
-    document.getElementById('loc-address').textContent = loc.address;
-    document.getElementById('loc-city').textContent = loc.city;
-    document.getElementById('loc-hours').textContent = loc.hours;
-    const phoneEl = document.getElementById('loc-phone');
-    phoneEl.textContent = loc.phone;
-    phoneEl.href = 'tel:' + loc.phone.replace(/\s/g, '');
-    const query = encodeURIComponent('Hart Bageri ' + loc.name + ', ' + loc.address + ', ' + loc.city);
-    document.getElementById('loc-maps-link').href = 'https://www.google.com/maps/search/?api=1&query=' + query;
-    document.getElementById('loc-map-text').textContent = loc.address + ' · ' + loc.city;
-    locStep1.classList.remove('is-active');
-    locStep2.classList.add('is-active');
-    document.getElementById('visit').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
   document.querySelectorAll('.location-btn').forEach(btn => {
-    btn.addEventListener('click', () => showLocation(parseInt(btn.dataset.loc, 10)));
+    btn.addEventListener('click', () => {
+      const loc = locations[parseInt(btn.dataset.loc, 10)];
+      if (!loc) return;
+      document.getElementById('loc-name').textContent = 'Hart Bageri · ' + loc.name;
+      document.getElementById('loc-address').textContent = loc.address;
+      document.getElementById('loc-city').textContent = loc.city;
+      document.getElementById('loc-hours').textContent = loc.hours;
+      const phoneEl = document.getElementById('loc-phone');
+      phoneEl.textContent = loc.phone;
+      phoneEl.href = 'tel:' + loc.phone.replace(/\s/g, '');
+      const query = encodeURIComponent('Hart Bageri ' + loc.name + ', ' + loc.address + ', ' + loc.city);
+      document.getElementById('loc-maps-link').href = 'https://www.google.com/maps/search/?api=1&query=' + query;
+      document.getElementById('loc-map-text').textContent = loc.address + ' · ' + loc.city;
+      locStep1.hidden = true;
+      locStep2.hidden = false;
+      document.getElementById('visit').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   });
   document.getElementById('location-back').addEventListener('click', () => {
-    locStep2.classList.remove('is-active');
-    locStep1.classList.add('is-active');
+    locStep2.hidden = true;
+    locStep1.hidden = false;
     document.getElementById('visit').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  // Pre-order — prices are placeholders in DKK and will be updated later
+  // Pre-order — prices match the Hart Bageri menu
   const products = {
     'bread-and-buns': [
-      { name: 'Bun',                          img: 'Bun.PNG',                          price: 25 },
-      { name: 'Bun with butter and cheese',   img: 'Bun_with_butter_and_cheese.PNG',   price: 45 },
-      { name: 'City Loaf',                    img: 'City_Loaf.PNG',                    price: 65 },
-      { name: 'Everyday Rye',                 img: 'Everyday_Rye.PNG',                 price: 55 },
-      { name: 'Sesame City Loaf',             img: 'Sesame_City_Loaf.PNG',             price: 70 },
-      { name: 'Superseed',                    img: 'Superseed.PNG',                    price: 75 },
+      { name: 'Bun',                                  img: 'Bun.PNG',                          price: 16 },
+      { name: 'Bun with butter and cheese',           img: 'Bun_with_butter_and_cheese.PNG',   price: 39 },
+      { name: 'City Loaf',                            img: 'City_Loaf.PNG',                    price: 59 },
+      { name: 'Sesame City Loaf',                     img: 'Sesame_City_Loaf.PNG',             price: 59 },
+      { name: 'Everyday Rye',                         img: 'Everyday_Rye.PNG',                 price: 50 },
+      { name: 'Superseed',                            img: 'Superseed.PNG',                    price: 55 },
     ],
     'pastry-and-cake': [
-      { name: 'Cardamom Croissant',           img: 'Cardamom_Croissant.PNG',           price: 38 },
-      { name: 'Chocolate Chip Cookie',        img: 'Chocolate_Chip_Cookie.PNG',        price: 32 },
-      { name: 'Croissant',                    img: 'Croissant.PNG',                    price: 30 },
-      { name: 'Large Cheesecake',             img: 'Large_Cheesecake.PNG',             price: 320 },
-      { name: 'Pain au Chocolat',             img: 'Pain_au_Chocolat.PNG',             price: 34 },
-      { name: 'Spandauer',                    img: 'Spandauer.PNG',                    price: 36 },
+      { name: 'Cardamom Croissant',                   img: 'Cardamom_Croissant.PNG',           price: 42 },
+      { name: 'Large Cheesecake',                     img: 'Large_Cheesecake.PNG',             price: 225 },
+      { name: 'Croissant',                            img: 'Croissant.PNG',                    price: 34 },
+      { name: 'Pain au Chocolat',                     img: 'Pain_au_Chocolat.PNG',             price: 42 },
+      { name: 'Spandauer',                            img: 'Spandauer.PNG',                    price: 38 },
+      { name: 'Chocolate Chip Cookie',                img: 'Chocolate_Chip_Cookie.PNG',        price: 35 },
     ],
     'lunch-and-savory': [
-      { name: 'Sausage Roll',                 img: 'Sausage_Roll.PNG',                 price: 58 },
+      { name: 'Sausage Roll',                         img: 'Sausage_Roll.PNG',                 price: 39 },
     ],
     'groceries': [
-      { name: 'Bornholm Water',               img: 'Bornholm_Water.PNG',               price: 25 },
-      { name: 'Butter from Øllingegaard',     img: 'Butter_from_Øllingegaard.PNG',     price: 65 },
-      { name: 'Cocio',                        img: 'Cocio.PNG',                        price: 28 },
-      { name: 'Earl Grey Tea',                img: 'Earl_Grey_Tea.PNG',                price: 75 },
-      { name: 'Ebeltoft Soda Ginger & Lemon', img: 'Ebeltoft_Soda_Ginger_&_Lemon.PNG', price: 35 },
-      { name: 'Ebeltoft Soda Raspberry',      img: 'Ebeltoft_Soda_Raspberry.PNG',      price: 35 },
-      { name: 'Ebeltoft Soda Rhubarb',        img: 'Ebeltoft_Soda_Rhubarb.PNG',        price: 35 },
-      { name: 'Fritz Cola',                   img: 'Fritz_Cola.PNG',                   price: 28 },
-      { name: 'Jam (London Borough of Jam)',  img: 'Jam_London_Borough_of_Jam.PNG',    price: 85 },
-      { name: 'Speedy Breakfast Tea',         img: 'Speedy_Breakfast_Tea.PNG',         price: 70 },
-      { name: 'Spring Water',                 img: 'Spring_water.PNG',                 price: 22 },
-      { name: 'Wild Rooibos Tea',             img: 'Wild_Rooibos_Tea.PNG',             price: 80 },
+      { name: 'Butter from Øllingegaard',             img: 'Butter_from_Øllingegaard.PNG',     price: 36 },
+      { name: 'Spring Water',                         img: 'Spring_water.PNG',                 price: 26 },
+      { name: 'Bornholm Water',                       img: 'Bornholm_Water.PNG',               price: 30 },
+      { name: 'Cocio – 240ml',                        img: 'Cocio.PNG',                        price: 32 },
+      { name: 'Fritz Cola',                           img: 'Fritz_Cola.PNG',                   price: 30 },
+      { name: 'Ebeltoft Soda Rhubarb – 250ml',        img: 'Ebeltoft_Soda_Rhubarb.PNG',        price: 39 },
+      { name: 'Ebeltoft Soda Raspberry – 250ml',      img: 'Ebeltoft_Soda_Raspberry.PNG',      price: 39 },
+      { name: 'Ebeltoft Soda Ginger & Lemon – 250ml', img: 'Ebeltoft_Soda_Ginger_&_Lemon.PNG', price: 39 },
+      { name: 'Earl Grey Tea',                        img: 'Earl_Grey_Tea.PNG',                price: 95 },
+      { name: 'Speedy Breakfast Tea',                 img: 'Speedy_Breakfast_Tea.PNG',         price: 95 },
+      { name: 'Wild Rooibos Tea',                     img: 'Wild_Rooibos_Tea.PNG',             price: 95 },
+      { name: 'Jam, London Borough of Jam',           img: 'Jam_London_Borough_of_Jam.PNG',    price: 59 },
     ],
   };
-  const priceFmt = n => n + ' kr';
+  const priceFmt = n => 'DKK ' + n.toFixed(2).replace('.', ',');
 
   const preStep1 = document.getElementById('preorder-step1');
   const preStep2 = document.getElementById('preorder-step2');

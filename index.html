@@ -868,8 +868,7 @@
     aspect-ratio: 9/16;
     border-radius: 6px;
     overflow: hidden;
-    background: var(--ink);
-    box-shadow: 0 20px 50px -20px rgba(141, 103, 38, 0.3);
+    background: transparent;
     position: relative;
   }
   .matcha-item video {
@@ -884,6 +883,9 @@
   }
 
   /* ───── LOCATION SWITCHER ───── */
+  .location-stage { display: none; }
+  .location-stage.is-active { display: block; }
+
   .location-list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1077,45 +1079,103 @@
     .preorder-products { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   }
   .product-card {
-    background: var(--white);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 18px;
+    background: transparent;
+    border: none;
+    padding: 0;
     text-align: center;
-    transition: all 0.25s ease;
+    transition: transform 0.25s ease;
     display: flex;
     flex-direction: column;
   }
-  .product-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 18px 40px -12px rgba(141, 103, 38, 0.2);
-    border-color: var(--gold);
-  }
+  .product-card:hover { transform: translateY(-3px); }
   .product-card-img {
     width: 100%;
     aspect-ratio: 1/1;
-    background: var(--cream);
-    border-radius: 4px;
     overflow: hidden;
     margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 4px;
   }
   .product-card-img img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     display: block;
-    padding: 8px;
+  }
+  .product-card-info {
+    padding: 0 4px 12px;
   }
   .product-card-name {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 500;
     color: var(--ink);
     line-height: 1.25;
-    margin-top: auto;
+    margin-bottom: 4px;
+  }
+  .product-card-price {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--gold-dark);
+    font-weight: 500;
+  }
+  .product-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 2px;
+  }
+  .qty-control {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--white);
+  }
+  .qty-btn {
+    background: transparent;
+    border: none;
+    width: 28px;
+    height: 30px;
+    cursor: pointer;
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+    transition: background 0.15s;
+  }
+  .qty-btn:hover { background: var(--beige); }
+  .qty-input {
+    width: 30px;
+    border: none;
+    text-align: center;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    background: transparent;
+    padding: 0;
+    -moz-appearance: textfield;
+  }
+  .qty-input::-webkit-outer-spin-button,
+  .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .product-add-btn {
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+  }
+  .product-add-btn:hover { background: var(--gold-dark); }
+  .product-add-btn.added {
+    background: var(--gold-dark);
   }
 
   .preorder-action {
@@ -1128,6 +1188,301 @@
     color: var(--ink-soft);
     font-size: 16px;
     margin-bottom: 22px;
+  }
+
+  /* ───── BASKET ───── */
+  .basket-toggle {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: none;
+    cursor: pointer;
+    z-index: 200;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .basket-toggle:hover {
+    transform: translateY(-2px);
+    background: var(--gold-dark);
+  }
+  .basket-toggle img {
+    width: 30px;
+    height: 30px;
+    filter: brightness(0) invert(1);
+  }
+  .basket-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--gold);
+    color: var(--ink);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: 999px;
+    min-width: 22px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .basket-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(31, 26, 20, 0.55);
+    z-index: 240;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .basket-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .basket-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 460px;
+    height: 100vh;
+    background: var(--cream);
+    z-index: 250;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.4s ease;
+    box-shadow: -30px 0 60px rgba(0, 0, 0, 0.18);
+  }
+  .basket-drawer.is-open { transform: translateX(0); }
+  .basket-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--line);
+    background: var(--white);
+  }
+  .basket-drawer-header small {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .basket-drawer-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    margin: 0;
+    font-weight: 500;
+  }
+  .basket-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--ink);
+    transition: color 0.2s;
+    line-height: 0;
+  }
+  .basket-close:hover { color: var(--gold-dark); }
+  .basket-close svg { width: 22px; height: 22px; }
+
+  .basket-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 28px;
+  }
+  .basket-empty {
+    color: var(--ink-soft);
+    font-size: 15px;
+    text-align: center;
+    padding: 60px 0;
+    font-style: italic;
+  }
+  .basket-pickup {
+    padding: 14px 16px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    margin: 14px 0 10px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .basket-pickup strong {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--ink);
+    font-size: 17px;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .basket-item {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .basket-item-img {
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--white);
+  }
+  .basket-item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .basket-item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .basket-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .basket-item-meta {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .basket-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+  .basket-item-qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--white);
+  }
+  .basket-item-qty button {
+    background: transparent;
+    border: none;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .basket-item-qty button:hover { background: var(--beige); }
+  .basket-item-qty span {
+    min-width: 24px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .basket-item-price {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gold-dark);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+  }
+  .basket-item-remove {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-top: 4px;
+    text-decoration: underline;
+    align-self: flex-start;
+  }
+  .basket-item-remove:hover { color: var(--ink); }
+  .basket-subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0 12px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    border-top: 2px solid var(--ink);
+    margin-top: 8px;
+  }
+
+  .basket-drawer-form {
+    padding: 20px 28px 24px;
+    border-top: 1px solid var(--line);
+    background: var(--white);
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+  .basket-drawer-form h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .basket-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 12px;
+    margin-bottom: 18px;
+  }
+  .basket-form-grid label {
+    display: flex;
+    flex-direction: column;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .basket-form-grid label .optional {
+    font-weight: 400;
+    text-transform: none;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+  .basket-form-grid-full { grid-column: 1 / -1; }
+  .basket-form-grid input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 6px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ink);
+  }
+  .basket-form-grid input:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: var(--white);
+  }
+  #basket-submit { width: 100%; justify-content: center; }
+  @media (max-width: 480px) {
+    .basket-drawer { max-width: 100%; }
+    .basket-form-grid { grid-template-columns: 1fr; }
   }
 
   /* ───── BRAND STRIP ───── */
@@ -1454,23 +1809,25 @@
       <p>Twelve bakeries across Copenhagen — pick the one nearest you.</p>
     </div>
 
-    <div id="location-list" class="location-list reveal">
-      <button type="button" class="location-btn" data-loc="0">Carlsberg Byen</button>
-      <button type="button" class="location-btn" data-loc="1">Frederiksberg</button>
-      <button type="button" class="location-btn" data-loc="2">Gammel Mønt</button>
-      <button type="button" class="location-btn" data-loc="3">Holmen</button>
-      <button type="button" class="location-btn" data-loc="4">Islands Brygge</button>
-      <button type="button" class="location-btn" data-loc="5">Istedgade</button>
-      <button type="button" class="location-btn" data-loc="6">Kødbyen</button>
-      <button type="button" class="location-btn" data-loc="7">Marmorkirken</button>
-      <button type="button" class="location-btn" data-loc="8">Ravnsborggade</button>
-      <button type="button" class="location-btn" data-loc="9">Refshalevej</button>
-      <button type="button" class="location-btn" data-loc="10">Stefansgade</button>
-      <button type="button" class="location-btn" data-loc="11">Østerbro</button>
+    <div id="location-step1" class="location-stage is-active">
+      <div class="location-list reveal">
+        <button type="button" class="location-btn" data-loc="0">Carlsberg Byen</button>
+        <button type="button" class="location-btn" data-loc="1">Frederiksberg</button>
+        <button type="button" class="location-btn" data-loc="2">Gammel Mønt</button>
+        <button type="button" class="location-btn" data-loc="3">Holmen</button>
+        <button type="button" class="location-btn" data-loc="4">Islands Brygge</button>
+        <button type="button" class="location-btn" data-loc="5">Istedgade</button>
+        <button type="button" class="location-btn" data-loc="6">Kødbyen</button>
+        <button type="button" class="location-btn" data-loc="7">Marmorkirken</button>
+        <button type="button" class="location-btn" data-loc="8">Ravnsborggade</button>
+        <button type="button" class="location-btn" data-loc="9">Refshalevej</button>
+        <button type="button" class="location-btn" data-loc="10">Stefansgade</button>
+        <button type="button" class="location-btn" data-loc="11">Østerbro</button>
+      </div>
     </div>
 
-    <div id="location-detail" class="location-detail" hidden>
-      <button class="location-back" id="location-back" type="button">
+    <div id="location-step2" class="location-stage">
+      <button type="button" class="location-back" id="location-back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         All locations
       </button>
@@ -1503,6 +1860,15 @@
               <div>
                 <strong>Call the bakery</strong>
                 <a id="loc-phone" href="tel:+4531111850">+45 31 11 18 50</a>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <strong>Email the bakery</strong>
+                <a id="loc-email" href="mailto:info@hartbageri.com">info@hartbageri.com</a>
               </div>
             </div>
           </div>
@@ -1571,6 +1937,42 @@
   </div>
 </footer>
 
+<button type="button" id="basket-toggle" class="basket-toggle" aria-label="Open basket">
+  <img src="assets/Shopping_basket.png" alt="" />
+  <span class="basket-count" id="basket-count" hidden>0</span>
+</button>
+
+<div id="basket-backdrop" class="basket-backdrop"></div>
+
+<aside id="basket-drawer" class="basket-drawer" aria-label="Your pre-order basket">
+  <header class="basket-drawer-header">
+    <div>
+      <small>Pre-order</small>
+      <h3>Your basket</h3>
+    </div>
+    <button type="button" class="basket-close" id="basket-close" aria-label="Close basket">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </header>
+
+  <div class="basket-drawer-body" id="basket-body">
+    <p class="basket-empty">Your basket is empty. Add items from the Pre-order section to get started.</p>
+  </div>
+
+  <form id="basket-form" class="basket-drawer-form" hidden>
+    <h4>Your details</h4>
+    <div class="basket-form-grid">
+      <label>First name<input type="text" name="fname" required /></label>
+      <label>Last name<input type="text" name="lname" required /></label>
+      <label>Phone<input type="tel" name="phone" required /></label>
+      <label>Company <span class="optional">(optional)</span><input type="text" name="company" /></label>
+      <label class="basket-form-grid-full">Email<input type="email" name="email" required /></label>
+      <label class="basket-form-grid-full">Confirm email<input type="email" name="email2" required /></label>
+    </div>
+    <button type="submit" id="basket-submit" class="btn btn-primary">Send pre-order</button>
+  </form>
+</aside>
+
 <script>
   // FAQ accordion
   document.querySelectorAll('.faq-q').forEach(btn => {
@@ -1598,9 +2000,8 @@
     { name: 'Østerbro',       address: 'Victor Borges Plads 2',        city: 'Copenhagen Ø, DK-2100',   hours: 'Open every day · 07:30 – 18:00', phone: '+45 31 11 18 50' },
   ];
 
-  const locList   = document.getElementById('location-list');
-  const locDetail = document.getElementById('location-detail');
-  const locBack   = document.getElementById('location-back');
+  const locStep1 = document.getElementById('location-step1');
+  const locStep2 = document.getElementById('location-step2');
 
   function showLocation(i) {
     const loc = locations[i];
@@ -1615,56 +2016,57 @@
     const query = encodeURIComponent('Hart Bageri ' + loc.name + ', ' + loc.address + ', ' + loc.city);
     document.getElementById('loc-maps-link').href = 'https://www.google.com/maps/search/?api=1&query=' + query;
     document.getElementById('loc-map-text').textContent = loc.address + ' · ' + loc.city;
-    locList.hidden = true;
-    locDetail.hidden = false;
-    locDetail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    locStep1.classList.remove('is-active');
+    locStep2.classList.add('is-active');
+    document.getElementById('visit').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   document.querySelectorAll('.location-btn').forEach(btn => {
     btn.addEventListener('click', () => showLocation(parseInt(btn.dataset.loc, 10)));
   });
-  locBack.addEventListener('click', () => {
-    locDetail.hidden = true;
-    locList.hidden = false;
+  document.getElementById('location-back').addEventListener('click', () => {
+    locStep2.classList.remove('is-active');
+    locStep1.classList.add('is-active');
     document.getElementById('visit').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  // Pre-order
+  // Pre-order — prices are placeholders in DKK and will be updated later
   const products = {
     'bread-and-buns': [
-      { name: 'Bun',                          img: 'Bun.PNG' },
-      { name: 'Bun with butter and cheese',   img: 'Bun_with_butter_and_cheese.PNG' },
-      { name: 'City Loaf',                    img: 'City_Loaf.PNG' },
-      { name: 'Everyday Rye',                 img: 'Everyday_Rye.PNG' },
-      { name: 'Sesame City Loaf',             img: 'Sesame_City_Loaf.PNG' },
-      { name: 'Superseed',                    img: 'Superseed.PNG' },
+      { name: 'Bun',                          img: 'Bun.PNG',                          price: 25 },
+      { name: 'Bun with butter and cheese',   img: 'Bun_with_butter_and_cheese.PNG',   price: 45 },
+      { name: 'City Loaf',                    img: 'City_Loaf.PNG',                    price: 65 },
+      { name: 'Everyday Rye',                 img: 'Everyday_Rye.PNG',                 price: 55 },
+      { name: 'Sesame City Loaf',             img: 'Sesame_City_Loaf.PNG',             price: 70 },
+      { name: 'Superseed',                    img: 'Superseed.PNG',                    price: 75 },
     ],
     'pastry-and-cake': [
-      { name: 'Cardamom Croissant',           img: 'Cardamom_Croissant.PNG' },
-      { name: 'Chocolate Chip Cookie',        img: 'Chocolate_Chip_Cookie.PNG' },
-      { name: 'Croissant',                    img: 'Croissant.PNG' },
-      { name: 'Large Cheesecake',             img: 'Large_Cheesecake.PNG' },
-      { name: 'Pain au Chocolat',             img: 'Pain_au_Chocolat.PNG' },
-      { name: 'Spandauer',                    img: 'Spandauer.PNG' },
+      { name: 'Cardamom Croissant',           img: 'Cardamom_Croissant.PNG',           price: 38 },
+      { name: 'Chocolate Chip Cookie',        img: 'Chocolate_Chip_Cookie.PNG',        price: 32 },
+      { name: 'Croissant',                    img: 'Croissant.PNG',                    price: 30 },
+      { name: 'Large Cheesecake',             img: 'Large_Cheesecake.PNG',             price: 320 },
+      { name: 'Pain au Chocolat',             img: 'Pain_au_Chocolat.PNG',             price: 34 },
+      { name: 'Spandauer',                    img: 'Spandauer.PNG',                    price: 36 },
     ],
     'lunch-and-savory': [
-      { name: 'Sausage Roll',                 img: 'Sausage_Roll.PNG' },
+      { name: 'Sausage Roll',                 img: 'Sausage_Roll.PNG',                 price: 58 },
     ],
     'groceries': [
-      { name: 'Bornholm Water',               img: 'Bornholm_Water.PNG' },
-      { name: 'Butter from Øllingegaard',     img: 'Butter_from_Øllingegaard.PNG' },
-      { name: 'Cocio',                        img: 'Cocio.PNG' },
-      { name: 'Earl Grey Tea',                img: 'Earl_Grey_Tea.PNG' },
-      { name: 'Ebeltoft Soda Ginger & Lemon', img: 'Ebeltoft_Soda_Ginger_&_Lemon.PNG' },
-      { name: 'Ebeltoft Soda Raspberry',      img: 'Ebeltoft_Soda_Raspberry.PNG' },
-      { name: 'Ebeltoft Soda Rhubarb',        img: 'Ebeltoft_Soda_Rhubarb.PNG' },
-      { name: 'Fritz Cola',                   img: 'Fritz_Cola.PNG' },
-      { name: 'Jam (London Borough of Jam)',  img: 'Jam_London_Borough_of_Jam.PNG' },
-      { name: 'Speedy Breakfast Tea',         img: 'Speedy_Breakfast_Tea.PNG' },
-      { name: 'Spring Water',                 img: 'Spring_water.PNG' },
-      { name: 'Wild Rooibos Tea',             img: 'Wild_Rooibos_Tea.PNG' },
+      { name: 'Bornholm Water',               img: 'Bornholm_Water.PNG',               price: 25 },
+      { name: 'Butter from Øllingegaard',     img: 'Butter_from_Øllingegaard.PNG',     price: 65 },
+      { name: 'Cocio',                        img: 'Cocio.PNG',                        price: 28 },
+      { name: 'Earl Grey Tea',                img: 'Earl_Grey_Tea.PNG',                price: 75 },
+      { name: 'Ebeltoft Soda Ginger & Lemon', img: 'Ebeltoft_Soda_Ginger_&_Lemon.PNG', price: 35 },
+      { name: 'Ebeltoft Soda Raspberry',      img: 'Ebeltoft_Soda_Raspberry.PNG',      price: 35 },
+      { name: 'Ebeltoft Soda Rhubarb',        img: 'Ebeltoft_Soda_Rhubarb.PNG',        price: 35 },
+      { name: 'Fritz Cola',                   img: 'Fritz_Cola.PNG',                   price: 28 },
+      { name: 'Jam (London Borough of Jam)',  img: 'Jam_London_Borough_of_Jam.PNG',    price: 85 },
+      { name: 'Speedy Breakfast Tea',         img: 'Speedy_Breakfast_Tea.PNG',         price: 70 },
+      { name: 'Spring Water',                 img: 'Spring_water.PNG',                 price: 22 },
+      { name: 'Wild Rooibos Tea',             img: 'Wild_Rooibos_Tea.PNG',             price: 80 },
     ],
   };
+  const priceFmt = n => n + ' kr';
 
   const preStep1 = document.getElementById('preorder-step1');
   const preStep2 = document.getElementById('preorder-step2');
@@ -1678,14 +2080,53 @@
 
   function renderProducts(category) {
     const items = products[category] || [];
-    preGrid.innerHTML = items.map(p => `
-      <article class="product-card">
+    preGrid.innerHTML = items.map((p, idx) => `
+      <article class="product-card" data-category="${category}" data-idx="${idx}">
         <div class="product-card-img">
           <img src="assets/preorder/${category}/${encodeURIComponent(p.img)}" alt="${escapeHTML(p.name)}" loading="lazy" />
         </div>
-        <div class="product-card-name">${escapeHTML(p.name)}</div>
+        <div class="product-card-info">
+          <div class="product-card-name">${escapeHTML(p.name)}</div>
+          <div class="product-card-price">${priceFmt(p.price)}</div>
+        </div>
+        <div class="product-card-actions">
+          <div class="qty-control">
+            <button type="button" class="qty-btn" data-act="dec" aria-label="Decrease quantity">−</button>
+            <input type="number" class="qty-input" value="1" min="1" max="99" aria-label="Quantity" />
+            <button type="button" class="qty-btn" data-act="inc" aria-label="Increase quantity">+</button>
+          </div>
+          <button type="button" class="product-add-btn" data-act="add">Add</button>
+        </div>
       </article>
     `).join('');
+
+    preGrid.querySelectorAll('.product-card').forEach(card => {
+      const cat = card.dataset.category;
+      const idx = parseInt(card.dataset.idx, 10);
+      const product = products[cat][idx];
+      const input = card.querySelector('.qty-input');
+      card.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          let v = parseInt(input.value, 10) || 1;
+          v = btn.dataset.act === 'inc' ? v + 1 : v - 1;
+          if (v < 1) v = 1;
+          if (v > 99) v = 99;
+          input.value = v;
+        });
+      });
+      card.querySelector('.product-add-btn').addEventListener('click', () => {
+        const qty = Math.max(1, parseInt(input.value, 10) || 1);
+        addToCart(cat, product, qty);
+        input.value = 1;
+        const addBtn = card.querySelector('.product-add-btn');
+        addBtn.textContent = 'Added ✓';
+        addBtn.classList.add('added');
+        setTimeout(() => {
+          addBtn.textContent = 'Add';
+          addBtn.classList.remove('added');
+        }, 1100);
+      });
+    });
   }
 
   let currentCategory = 'bread-and-buns';
@@ -1716,6 +2157,154 @@
     preStep1.hidden = false;
     document.getElementById('preorder').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
+
+  // Basket
+  const basketToggle   = document.getElementById('basket-toggle');
+  const basketDrawer   = document.getElementById('basket-drawer');
+  const basketBackdrop = document.getElementById('basket-backdrop');
+  const basketClose    = document.getElementById('basket-close');
+  const basketBody     = document.getElementById('basket-body');
+  const basketForm     = document.getElementById('basket-form');
+  const basketCount    = document.getElementById('basket-count');
+
+  let cart = [];
+  let selectedLocationName = null;
+
+  function openBasket() {
+    basketDrawer.classList.add('is-open');
+    basketBackdrop.classList.add('is-open');
+  }
+  function closeBasket() {
+    basketDrawer.classList.remove('is-open');
+    basketBackdrop.classList.remove('is-open');
+  }
+
+  function renderBasket() {
+    const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+    if (totalItems > 0) {
+      basketCount.textContent = totalItems;
+      basketCount.hidden = false;
+    } else {
+      basketCount.hidden = true;
+    }
+
+    if (cart.length === 0) {
+      basketBody.innerHTML = '<p class="basket-empty">Your basket is empty. Add items from the Pre-order section to get started.</p>';
+      basketForm.hidden = true;
+      return;
+    }
+
+    let html = '';
+    if (selectedLocationName) {
+      html += `<div class="basket-pickup"><span>Picking up at</span><strong>Hart Bageri · ${escapeHTML(selectedLocationName)}</strong></div>`;
+    }
+    cart.forEach(item => {
+      html += `
+        <div class="basket-item">
+          <div class="basket-item-img"><img src="assets/preorder/${item.category}/${encodeURIComponent(item.img)}" alt="" /></div>
+          <div class="basket-item-body">
+            <div class="basket-item-name">${escapeHTML(item.name)}</div>
+            <div class="basket-item-meta">${priceFmt(item.price)} each</div>
+            <div class="basket-item-row">
+              <div class="basket-item-qty">
+                <button type="button" data-act="dec" data-id="${item.id}" aria-label="Decrease">−</button>
+                <span>${item.qty}</span>
+                <button type="button" data-act="inc" data-id="${item.id}" aria-label="Increase">+</button>
+              </div>
+              <div class="basket-item-price">${priceFmt(item.price * item.qty)}</div>
+            </div>
+            <button type="button" class="basket-item-remove" data-act="remove" data-id="${item.id}">Remove</button>
+          </div>
+        </div>
+      `;
+    });
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    html += `<div class="basket-subtotal"><span>Subtotal</span><span>${priceFmt(subtotal)}</span></div>`;
+    basketBody.innerHTML = html;
+    basketForm.hidden = false;
+
+    basketBody.querySelectorAll('[data-act]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        const act = btn.dataset.act;
+        const item = cart.find(i => i.id === id);
+        if (!item) return;
+        if (act === 'inc') item.qty++;
+        else if (act === 'dec') { item.qty--; if (item.qty < 1) item.qty = 1; }
+        else if (act === 'remove') cart = cart.filter(i => i.id !== id);
+        renderBasket();
+      });
+    });
+  }
+
+  function addToCart(category, item, qty) {
+    const id = category + '/' + item.img;
+    const existing = cart.find(i => i.id === id);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      cart.push({ id, category, name: item.name, img: item.img, price: item.price, qty });
+    }
+    renderBasket();
+  }
+
+  basketToggle.addEventListener('click', openBasket);
+  basketClose.addEventListener('click', closeBasket);
+  basketBackdrop.addEventListener('click', closeBasket);
+
+  basketForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(basketForm);
+    const fname   = (data.get('fname')   || '').toString().trim();
+    const lname   = (data.get('lname')   || '').toString().trim();
+    const phone   = (data.get('phone')   || '').toString().trim();
+    const company = (data.get('company') || '').toString().trim();
+    const email   = (data.get('email')   || '').toString().trim();
+    const email2  = (data.get('email2')  || '').toString().trim();
+    if (!fname || !lname || !phone || !email || !email2) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+    if (email !== email2) {
+      alert('The two email addresses don’t match.');
+      return;
+    }
+    if (cart.length === 0) {
+      alert('Your basket is empty.');
+      return;
+    }
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const lines = cart.map(i => `${i.qty} × ${i.name} — ${priceFmt(i.price * i.qty)}`).join('\n');
+    const bodyText = [
+      `Pre-order from the Hart Bageri website`,
+      ``,
+      `Name: ${fname} ${lname}`,
+      `Phone: ${phone}`,
+      company ? `Company: ${company}` : null,
+      `Email: ${email}`,
+      selectedLocationName ? `Pickup at: Hart Bageri · ${selectedLocationName}` : null,
+      ``,
+      `Items:`,
+      lines,
+      ``,
+      `Subtotal: ${priceFmt(subtotal)}`
+    ].filter(Boolean).join('\n');
+    const mailto = 'mailto:info@hartbageri.com'
+      + '?subject=' + encodeURIComponent('Pre-order — ' + fname + ' ' + lname)
+      + '&body=' + encodeURIComponent(bodyText);
+    window.location.href = mailto;
+  });
+
+  // hook into the pre-order location selection so the basket knows where to pick up
+  const _origPreClick = document.querySelectorAll('.preorder-loc-btn');
+  _origPreClick.forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedLocationName = locations[parseInt(btn.dataset.loc, 10)].name;
+      renderBasket();
+    });
+  });
+
+  renderBasket();
 
   // Reveal on scroll
   const io = new IntersectionObserver((entries) => {

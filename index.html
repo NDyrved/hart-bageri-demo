@@ -199,8 +199,7 @@
     width: 100%;
     height: auto;
     display: block;
-    filter: invert(1);
-    mix-blend-mode: screen;
+    filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.35));
   }
   .hero-tagline {
     font-family: 'Cormorant Garamond', serif;
@@ -816,6 +815,132 @@
     .span-2-rows { grid-row: auto; }
   }
 
+  /* ───── PORTRAIT GALLERY VIDEO ───── */
+  .gallery-video {
+    max-width: 320px;
+    margin: 28px auto 0;
+    aspect-ratio: 9/16;
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+    background: var(--beige);
+    box-shadow: 0 30px 60px -20px rgba(31, 26, 20, 0.25);
+  }
+  .gallery-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .gallery-video figcaption {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    right: 20px;
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    z-index: 2;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  }
+  .gallery-video::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(31, 26, 20, 0.55) 100%);
+    pointer-events: none;
+  }
+
+  /* ───── MATCHA SERIES ───── */
+  .matcha {
+    background: var(--cream);
+  }
+  .matcha-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .matcha-item {
+    aspect-ratio: 9/16;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--beige);
+    box-shadow: 0 20px 50px -20px rgba(141, 103, 38, 0.3);
+    position: relative;
+  }
+  .matcha-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  @media (max-width: 760px) {
+    .matcha-grid { grid-template-columns: 1fr; gap: 16px; }
+    .matcha-item { max-width: 320px; margin: 0 auto; width: 100%; }
+  }
+
+  /* ───── LOCATION SWITCHER ───── */
+  .location-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 940px;
+    margin: 10px auto 0;
+  }
+  .location-btn {
+    background: rgba(212, 175, 106, 0.06);
+    border: 1px solid rgba(212, 175, 106, 0.25);
+    color: var(--cream);
+    padding: 22px 18px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+    letter-spacing: 0.005em;
+  }
+  .location-btn:hover {
+    background: rgba(212, 175, 106, 0.16);
+    border-color: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  .location-back {
+    background: none;
+    border: none;
+    color: var(--gold-light);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+    padding: 8px 0;
+    transition: color 0.2s;
+  }
+  .location-back svg { width: 14px; height: 14px; }
+  .location-back:hover { color: var(--cream); }
+  .location-detail .location-text h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    color: var(--cream);
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+  @media (max-width: 880px) {
+    .location-list { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .location-list { grid-template-columns: 1fr; }
+    .location-btn { padding: 18px 16px; font-size: 20px; }
+  }
+
   /* ───── BRAND STRIP ───── */
   .brand-strip {
     position: relative;
@@ -870,9 +995,8 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="#top" class="brand">
-      <span class="brand-mark"><img src="assets/logo-bakers-mark.webp" alt="Hart Bageri mark" /></span>
-      Hart Bageri
+    <a href="#top" class="brand" aria-label="Hart Bageri — home">
+      <span class="brand-mark"><img src="assets/logo-bakers-mark.webp" alt="Hart Bageri" /></span>
     </a>
     <div class="nav-links">
       <a href="#services">Bakery</a>
@@ -892,7 +1016,7 @@
   <div class="container hero-content">
     <div class="eyebrow reveal">Copenhagen V · Est. Bakery</div>
     <h1 class="hero-logo reveal">
-      <img src="assets/Hart_bageri_text_curved.png" alt="Hart Bageri" />
+      <img src="assets/Hart_bageri_curved_text_white.png" alt="Hart Bageri" />
     </h1>
     <p class="hero-tagline reveal">Baked with soul. Made for Copenhagen.</p>
 
@@ -1050,9 +1174,31 @@
         <img src="assets/Rasberry_Cupcake.jpg" alt="Raspberry cupcake" loading="lazy" />
         <div class="gallery-caption">Raspberry</div>
       </div>
-      <div class="gallery-item span-full reveal">
-        <video src="assets/Banana_cake_video_1.mp4" autoplay muted loop playsinline></video>
-        <div class="gallery-caption">In the kitchen</div>
+    </div>
+
+    <figure class="gallery-video reveal">
+      <video src="assets/Banana_cake_video_1.mp4" autoplay muted loop playsinline></video>
+      <figcaption>In the kitchen</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="matcha" id="matcha">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Special Series</div>
+      <h2>The <span class="accent">matcha</span> moment</h2>
+      <p>A little something different — matcha worked into pastries and bakes.</p>
+    </div>
+    <div class="matcha-grid">
+      <div class="matcha-item reveal">
+        <video src="assets/Matcha_1.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div class="matcha-item reveal">
+        <video src="assets/Matcha_2.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div class="matcha-item reveal">
+        <video src="assets/Matcha_3.mp4" autoplay muted loop playsinline></video>
       </div>
     </div>
   </div>
@@ -1060,51 +1206,75 @@
 
 <section class="location" id="visit">
   <div class="container">
-    <div class="location-inner">
-      <div class="location-text reveal">
-        <div class="eyebrow">Find the Bakery</div>
-        <h2>Stop by, <span class="accent">say hello</span></h2>
-        <p>We're in Copenhagen V — open every morning at 07:30. Whether it's a loaf for dinner, a coffee on the way to work, or a cake for the weekend, we'll be here.</p>
+    <div class="section-head reveal">
+      <div class="eyebrow">Find the Bakery</div>
+      <h2>Stop by, <span class="accent">say hello</span></h2>
+      <p>Twelve bakeries across Copenhagen — pick the one nearest you.</p>
+    </div>
 
-        <div class="location-info">
-          <div class="info-row">
-            <div class="info-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    <div id="location-list" class="location-list reveal">
+      <button class="location-btn" data-loc="0">Carlsberg Byen</button>
+      <button class="location-btn" data-loc="1">Frederiksberg</button>
+      <button class="location-btn" data-loc="2">Gammel Mønt</button>
+      <button class="location-btn" data-loc="3">Holmen</button>
+      <button class="location-btn" data-loc="4">Islands Brygge</button>
+      <button class="location-btn" data-loc="5">Istedgade</button>
+      <button class="location-btn" data-loc="6">Kødbyen</button>
+      <button class="location-btn" data-loc="7">Marmorkirken</button>
+      <button class="location-btn" data-loc="8">Ravnsborggade</button>
+      <button class="location-btn" data-loc="9">Refshalevej</button>
+      <button class="location-btn" data-loc="10">Stefansgade</button>
+      <button class="location-btn" data-loc="11">Østerbro</button>
+    </div>
+
+    <div id="location-detail" class="location-detail" hidden>
+      <button class="location-back" id="location-back" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        All locations
+      </button>
+      <div class="location-inner">
+        <div class="location-text">
+          <h3 id="loc-name">Hart Bageri</h3>
+          <div class="location-info">
+            <div class="info-row">
+              <div class="info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <strong id="loc-address"></strong>
+                <span id="loc-city"></span>
+              </div>
             </div>
-            <div>
-              <strong>Copenhagen V, DK-1712</strong>
-              <a href="https://maps.app.goo.gl/EW3BPFqjSyoH6bUg9" target="_blank" rel="noopener">Open in Google Maps →</a>
+            <div class="info-row">
+              <div class="info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              </div>
+              <div>
+                <strong>Opening hours</strong>
+                <span id="loc-hours"></span>
+              </div>
             </div>
-          </div>
-          <div class="info-row">
-            <div class="info-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-            </div>
-            <div>
-              <strong>Open Daily</strong>
-              <span>07:30 – 18:00 · Every day</span>
-            </div>
-          </div>
-          <div class="info-row">
-            <div class="info-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
-            </div>
-            <div>
-              <strong>Call the Bakery</strong>
-              <a href="tel:+4531111850">+45 31 11 18 50</a>
+            <div class="info-row">
+              <div class="info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+              </div>
+              <div>
+                <strong>Call the bakery</strong>
+                <a id="loc-phone" href="tel:+4531111850">+45 31 11 18 50</a>
+              </div>
             </div>
           </div>
         </div>
+
+        <a id="loc-maps-link" class="map-card" target="_blank" rel="noopener" href="#">
+          <div class="map-card-inner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <h4>Get Directions</h4>
+            <p id="loc-map-text"></p>
+            <span class="btn btn-primary">Open in Maps</span>
+          </div>
+        </a>
       </div>
-
-      <a href="https://maps.app.goo.gl/EW3BPFqjSyoH6bUg9" target="_blank" rel="noopener" class="map-card reveal">
-        <div class="map-card-inner">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <h4>Get Directions</h4>
-          <p>Copenhagen V, DK-1712</p>
-          <span class="btn btn-primary">Open in Maps</span>
-        </div>
-      </a>
     </div>
   </div>
 </section>
@@ -1142,12 +1312,12 @@
         <div class="value">info@hartbageri.com</div>
       </a>
 
-      <a href="https://maps.app.goo.gl/EW3BPFqjSyoH6bUg9" target="_blank" rel="noopener" class="contact-card reveal">
+      <a href="#visit" class="contact-card reveal">
         <div class="contact-card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
         </div>
         <div class="label">Visit</div>
-        <div class="value">Copenhagen V</div>
+        <div class="value">12 bakeries in Copenhagen</div>
       </a>
     </div>
   </div>
@@ -1174,7 +1344,7 @@
       </div>
       <div class="faq-item">
         <button class="faq-q">Where are you located?</button>
-        <div class="faq-a"><p>We're in Copenhagen V, DK-1712. The easiest way to find us is to <a href="https://maps.app.goo.gl/EW3BPFqjSyoH6bUg9" target="_blank" rel="noopener" style="color: var(--gold-dark);">open us in Google Maps</a>.</p></div>
+        <div class="faq-a"><p>We have twelve bakeries across Copenhagen and Frederiksberg. Use the <a href="#visit" style="color: var(--gold-dark);">Find the Bakery</a> section to pick the one nearest you.</p></div>
       </div>
     </div>
   </div>
@@ -1187,8 +1357,8 @@
     <div class="footer-info">
       <a href="tel:+4531111850">+45 31 11 18 50</a>
       <a href="mailto:info@hartbageri.com">info@hartbageri.com</a>
-      <a href="https://maps.app.goo.gl/EW3BPFqjSyoH6bUg9" target="_blank" rel="noopener">Copenhagen V, DK-1712</a>
-      <span>Open daily 07:30 – 18:00</span>
+      <a href="#visit">12 bakeries in Copenhagen</a>
+      <span>Open daily from 07:30</span>
     </div>
     <div class="footer-divider"></div>
     <div class="footer-copy">© Hart Bageri · Copenhagen</div>
@@ -1204,6 +1374,53 @@
       document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
       if (!wasOpen) item.classList.add('open');
     });
+  });
+
+  // Location switcher
+  const locations = [
+    { name: 'Carlsberg Byen', address: 'Franciska Clausens Plads 29', city: 'Copenhagen V, DK-1799', hours: 'Open every day · 07:30 – 17:00', phone: '+45 31 11 18 50' },
+    { name: 'Frederiksberg',  address: 'Gammel Kongevej 109',         city: 'Frederiksberg, DK-1850',  hours: 'Open every day · 07:30 – 18:00', phone: '+45 31 11 18 50' },
+    { name: 'Gammel Mønt',    address: 'Gammel Mønt 4',                city: 'Copenhagen K, DK-1117',   hours: 'Mon – Fri 07:30 – 18:00 · Sat – Sun 08:00 – 18:00', phone: '+45 31 11 18 50' },
+    { name: 'Holmen',         address: 'Galionsvej 41',                city: 'Copenhagen K, DK-1437',   hours: 'Sun – Thu 07:30 – 18:00 · Fri – Sat 07:30 – 19:00', phone: '+45 31 11 18 50' },
+    { name: 'Islands Brygge', address: 'Islands Brygge 23',            city: 'Copenhagen S, DK-2300',   hours: 'Open every day · 07:30 – 18:00', phone: '+45 31 11 18 50' },
+    { name: 'Istedgade',      address: 'Istedgade 61',                 city: 'Copenhagen V, DK-1716',   hours: 'Open every day · 07:30 – 18:00', phone: '+45 31 11 18 50' },
+    { name: 'Kødbyen',        address: 'Høkerboderne 17',              city: 'Copenhagen V, DK-1712',   hours: 'Open every day · 07:30 – 18:00', phone: '+45 31 11 18 50' },
+    { name: 'Marmorkirken',   address: 'Store Kongensgade 75',         city: 'Copenhagen K, DK-1264',   hours: 'Open every day · 07:30 – 18:00', phone: '+45 31 11 18 50' },
+    { name: 'Ravnsborggade',  address: 'Ravnsborggade 1',              city: 'Copenhagen N, DK-2200',   hours: 'Open every day · 07:30 – 18:00', phone: '+45 31 11 18 50' },
+    { name: 'Refshalevej',    address: 'Refshalevej 159A',             city: 'Copenhagen K, DK-1432',   hours: 'Open every day · 07:30 – 18:00', phone: '+45 31 11 18 50' },
+    { name: 'Stefansgade',    address: 'Julius Bloms Gade 32',         city: 'Copenhagen N, DK-2200',   hours: 'Open every day · 07:30 – 18:00', phone: '+45 31 11 18 50' },
+    { name: 'Østerbro',       address: 'Victor Borges Plads 2',        city: 'Copenhagen Ø, DK-2100',   hours: 'Open every day · 07:30 – 18:00', phone: '+45 31 11 18 50' },
+  ];
+
+  const locList   = document.getElementById('location-list');
+  const locDetail = document.getElementById('location-detail');
+  const locBack   = document.getElementById('location-back');
+
+  function showLocation(i) {
+    const loc = locations[i];
+    if (!loc) return;
+    document.getElementById('loc-name').textContent = 'Hart Bageri · ' + loc.name;
+    document.getElementById('loc-address').textContent = loc.address;
+    document.getElementById('loc-city').textContent = loc.city;
+    document.getElementById('loc-hours').textContent = loc.hours;
+    const phoneEl = document.getElementById('loc-phone');
+    phoneEl.textContent = loc.phone;
+    phoneEl.href = 'tel:' + loc.phone.replace(/\s/g, '');
+    const query = encodeURIComponent('Hart Bageri ' + loc.name + ', ' + loc.address + ', ' + loc.city);
+    document.getElementById('loc-maps-link').href = 'https://www.google.com/maps/search/?api=1&query=' + query;
+    document.getElementById('loc-map-text').textContent = loc.address + ' · ' + loc.city;
+    locList.hidden = true;
+    locDetail.hidden = false;
+    locDetail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.querySelectorAll('.location-btn').forEach(btn => {
+    btn.addEventListener('click', () => showLocation(parseInt(btn.dataset.loc, 10)));
+  });
+  locBack.addEventListener('click', () => {
+    locDetail.hidden = true;
+    locList.hidden = false;
+    document.getElementById('visit').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   // Reveal on scroll

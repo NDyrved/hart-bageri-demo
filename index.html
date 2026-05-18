@@ -402,6 +402,7 @@
     top: -200px; right: -200px;
     width: 500px; height: 500px;
     border-radius: 50%;
+    pointer-events: none;
     background: radial-gradient(circle, rgba(184, 137, 58, 0.12) 0%, transparent 70%);
   }
   .about-grid {
@@ -478,6 +479,7 @@
     content: "";
     position: absolute;
     inset: 0;
+    pointer-events: none;
     background:
       radial-gradient(ellipse at 10% 50%, rgba(212, 175, 106, 0.12) 0%, transparent 50%),
       radial-gradient(ellipse at 90% 50%, rgba(184, 137, 58, 0.08) 0%, transparent 50%);
@@ -1786,14 +1788,6 @@
       <div id="preorder-products" class="preorder-products">
         <!-- product cards rendered by JS -->
       </div>
-
-      <div class="preorder-action">
-        <p>Call your bakery to confirm your pre-order.</p>
-        <a id="preorder-call" class="btn btn-primary" href="tel:+4531111850">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
-          Call to pre-order
-        </a>
-      </div>
     </div>
   </div>
 </section>
@@ -2066,7 +2060,6 @@
   const preStep1 = document.getElementById('preorder-step1');
   const preStep2 = document.getElementById('preorder-step2');
   const preName  = document.getElementById('preorder-selected-name');
-  const preCall  = document.getElementById('preorder-call');
   const preGrid  = document.getElementById('preorder-products');
 
   function escapeHTML(s) {
@@ -2139,7 +2132,6 @@
       const loc = locations[parseInt(btn.dataset.loc, 10)];
       if (!loc) return;
       preName.textContent = 'Hart Bageri · ' + loc.name;
-      preCall.href = 'tel:' + loc.phone.replace(/\s/g, '');
       preStep1.hidden = true;
       preStep2.hidden = false;
       renderProducts(currentCategory);

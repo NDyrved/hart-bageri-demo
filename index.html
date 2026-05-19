@@ -402,7 +402,9 @@
     position: relative;
     min-height: 100vh;
     overflow: hidden;
-    background: var(--cream);
+    /* matches the warm tan backdrop in the video so the
+       object-fit: contain letterbox blends seamlessly */
+    background: #e2c9b3;
     padding: 0;
   }
   .bread-cut-video {
@@ -1777,7 +1779,7 @@
 
 <section class="bread-cut" id="bread-cut" aria-label="Bread sliced to order">
   <video class="bread-cut-video" id="bread-cut-video" muted playsinline preload="auto" disableremoteplayback aria-hidden="true">
-    <source src="assets/Bread_video_animation.mp4" type="video/mp4">
+    <source src="assets/Bread_animation_video.mp4" type="video/mp4">
   </video>
   <div class="bread-cut-caption">
     <small>From the oven</small>

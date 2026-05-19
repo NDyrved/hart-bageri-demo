@@ -343,6 +343,22 @@
     background: var(--white);
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .services-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    opacity: 0.22;
+    pointer-events: none;
+  }
+  .services > .container {
+    position: relative;
+    z-index: 1;
   }
   .services-grid {
     display: grid;
@@ -652,7 +668,7 @@
   }
 
   /* ───── FAQ ───── */
-  .faq { background: var(--white); border-top: 1px solid var(--line); }
+  .faq { background: var(--cream); }
   .faq-list {
     max-width: 760px;
     margin: 0 auto;
@@ -1262,14 +1278,14 @@
     position: fixed;
     bottom: 24px;
     right: 24px;
-    width: 62px;
-    height: 62px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    background: var(--ink);
-    border: none;
+    background: var(--cream);
+    border: 1px solid rgba(31, 26, 20, 0.1);
     cursor: pointer;
     z-index: 200;
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+    box-shadow: 0 14px 32px rgba(31, 26, 20, 0.22);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1277,12 +1293,11 @@
   }
   .basket-toggle:hover {
     transform: translateY(-2px);
-    background: var(--gold-dark);
+    background: var(--white);
   }
   .basket-toggle img {
-    width: 30px;
-    height: 30px;
-    filter: brightness(0) invert(1);
+    width: 36px;
+    height: 36px;
   }
   .basket-count {
     position: absolute;
@@ -1698,6 +1713,9 @@
 </section>
 
 <section class="services" id="services">
+  <video class="services-video" id="services-video" muted playsinline preload="auto" disableremoteplayback aria-hidden="true">
+    <source src="assets/Bread_video_animation.mp4" type="video/mp4">
+  </video>
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow">The Bakery</div>
@@ -2013,6 +2031,65 @@
 </aside>
 
 <script>
+  // Services section — scroll-driven bread video
+  (function () {
+    const section = document.getElementById('services');
+    const video = document.getElementById('services-video');
+    if (!section || !video) return;
+
+    let duration = 0;
+    let targetTime = 0;
+    let rafId = null;
+
+    function progress() {
+      const rect = section.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const total = vh + rect.height;
+      const traveled = vh - rect.top;
+      return Math.max(0, Math.min(1, traveled / total));
+    }
+
+    function tick() {
+      rafId = null;
+      const current = video.currentTime;
+      // ease toward target for smoother scrubbing across keyframes
+      const next = current + (targetTime - current) * 0.25;
+      if (Math.abs(next - current) > 0.01) {
+        try { video.currentTime = next; } catch (e) {}
+        rafId = requestAnimationFrame(tick);
+      } else if (Math.abs(targetTime - current) > 0.001) {
+        try { video.currentTime = targetTime; } catch (e) {}
+      }
+    }
+
+    function onScroll() {
+      if (!duration) return;
+      targetTime = progress() * duration;
+      if (rafId === null) rafId = requestAnimationFrame(tick);
+    }
+
+    function onReady() {
+      duration = video.duration || 0;
+      if (!duration) return;
+      targetTime = progress() * duration;
+      try { video.currentTime = targetTime; } catch (e) {}
+    }
+
+    // Some browsers need a brief play()/pause() before currentTime can be set
+    video.addEventListener('loadedmetadata', () => {
+      const kick = video.play();
+      if (kick && kick.then) {
+        kick.then(() => video.pause()).catch(() => {});
+      } else {
+        try { video.pause(); } catch (e) {}
+      }
+      onReady();
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+  })();
+
   // Behind the scenes — click a video to toggle sound
   document.querySelectorAll('.behind-scenes-item').forEach(item => {
     const vid = item.querySelector('video');

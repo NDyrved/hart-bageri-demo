@@ -343,22 +343,6 @@
     background: var(--white);
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
-    position: relative;
-    overflow: hidden;
-  }
-  .services-video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-    opacity: 0.22;
-    pointer-events: none;
-  }
-  .services > .container {
-    position: relative;
-    z-index: 1;
   }
   .services-grid {
     display: grid;
@@ -404,6 +388,59 @@
   @media (max-width: 560px) {
     .services-grid { grid-template-columns: 1fr; }
     .service-card { padding: 40px 28px; }
+  }
+
+  /* ───── BREAD CUT ───── */
+  .bread-cut {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background: var(--ink);
+    padding: 0;
+  }
+  .bread-cut-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  .bread-cut-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(31, 26, 20, 0.45) 0%, rgba(31, 26, 20, 0.12) 35%, rgba(31, 26, 20, 0.55) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .bread-cut-caption {
+    position: absolute;
+    bottom: clamp(40px, 8vh, 80px);
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 2;
+    color: var(--cream);
+    padding: 0 24px;
+    pointer-events: none;
+  }
+  .bread-cut-caption small {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .bread-cut-caption em {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(28px, 4.5vw, 52px);
+    line-height: 1.2;
+    text-shadow: 0 2px 28px rgba(0, 0, 0, 0.55);
+    font-weight: 400;
   }
 
   /* ───── ABOUT ───── */
@@ -1712,10 +1749,18 @@
   </div>
 </section>
 
-<section class="services" id="services">
-  <video class="services-video" id="services-video" muted playsinline preload="auto" disableremoteplayback aria-hidden="true">
+<section class="bread-cut" id="bread-cut" aria-label="Bread sliced to order">
+  <video class="bread-cut-video" id="bread-cut-video" muted playsinline preload="auto" disableremoteplayback aria-hidden="true">
     <source src="assets/Bread_video_animation.mp4" type="video/mp4">
   </video>
+  <div class="bread-cut-overlay"></div>
+  <div class="bread-cut-caption">
+    <small>From the oven</small>
+    <em>Cut to order — every loaf, every day.</em>
+  </div>
+</section>
+
+<section class="services" id="services">
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow">The Bakery</div>
@@ -2031,11 +2076,15 @@
 </aside>
 
 <script>
-  // Services section — scroll-driven bread video
+  // Bread cut section — scroll-driven slicing video
   (function () {
-    const section = document.getElementById('services');
-    const video = document.getElementById('services-video');
+    const section = document.getElementById('bread-cut');
+    const video = document.getElementById('bread-cut-video');
     if (!section || !video) return;
+
+    // SPEED: progress is multiplied so the video finishes well before
+    // the section scrolls past, giving a punchier feel.
+    const SPEED = 1.6;
 
     let duration = 0;
     let targetTime = 0;
@@ -2046,14 +2095,14 @@
       const vh = window.innerHeight || document.documentElement.clientHeight;
       const total = vh + rect.height;
       const traveled = vh - rect.top;
-      return Math.max(0, Math.min(1, traveled / total));
+      return Math.max(0, Math.min(1, (traveled / total) * SPEED));
     }
 
     function tick() {
       rafId = null;
       const current = video.currentTime;
-      // ease toward target for smoother scrubbing across keyframes
-      const next = current + (targetTime - current) * 0.25;
+      // ease toward target for smoother scrubbing between keyframes
+      const next = current + (targetTime - current) * 0.35;
       if (Math.abs(next - current) > 0.01) {
         try { video.currentTime = next; } catch (e) {}
         rafId = requestAnimationFrame(tick);

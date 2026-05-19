@@ -403,8 +403,9 @@
     min-height: 100vh;
     overflow: hidden;
     /* matches the warm tan backdrop in the video so the
-       object-fit: contain letterbox blends seamlessly */
-    background: #e2c9b3;
+       object-fit: contain letterbox blends seamlessly. Sampled
+       from both edges across 5 frames of the clip */
+    background: #e4c9b8;
     padding: 0;
   }
   .bread-cut-video {
@@ -946,6 +947,44 @@
   }
 
   /* ───── LOCATION SWITCHER ───── */
+  /* native dropdown — phone only, swapped in via the small breakpoint */
+  .location-select, .preorder-select {
+    display: none;
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 16px 44px 16px 18px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    border-radius: 4px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+  }
+  .location-select {
+    background-color: rgba(212, 175, 106, 0.08);
+    color: var(--cream);
+    border: 1px solid rgba(212, 175, 106, 0.32);
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af6a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  }
+  .location-select option {
+    background: #1f1a14;
+    color: #faf6ee;
+  }
+  .preorder-select {
+    background-color: var(--cream);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f1a14' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  }
+  .location-select:focus, .preorder-select:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
   .location-list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1003,9 +1042,9 @@
   @media (max-width: 880px) {
     .location-list { grid-template-columns: repeat(2, 1fr); }
   }
-  @media (max-width: 480px) {
-    .location-list { grid-template-columns: 1fr; }
-    .location-btn { padding: 18px 16px; font-size: 20px; }
+  @media (max-width: 560px) {
+    .location-list { display: none; }
+    .location-select { display: block; }
   }
 
   /* ───── BEHIND THE SCENES ───── */
@@ -1115,8 +1154,9 @@
   @media (max-width: 880px) {
     .preorder-locations { grid-template-columns: repeat(2, 1fr); }
   }
-  @media (max-width: 480px) {
-    .preorder-locations { grid-template-columns: 1fr; }
+  @media (max-width: 560px) {
+    .preorder-locations { display: none; }
+    .preorder-select { display: block; }
   }
 
   .preorder-selected-bar {
@@ -1714,6 +1754,9 @@
         <button type="button" class="location-btn" data-loc="10">Stefansgade</button>
         <button type="button" class="location-btn" data-loc="11">Østerbro</button>
       </div>
+      <select class="location-select" id="location-select" aria-label="Choose a bakery">
+        <option value="">Choose a bakery…</option>
+      </select>
     </div>
 
     <div id="location-step2" hidden>
@@ -1999,6 +2042,9 @@
         <button type="button" class="preorder-loc-btn" data-loc="10">Stefansgade</button>
         <button type="button" class="preorder-loc-btn" data-loc="11">Østerbro</button>
       </div>
+      <select class="preorder-select" id="preorder-select" aria-label="Choose a bakery">
+        <option value="">Choose a bakery…</option>
+      </select>
     </div>
 
     <div id="preorder-step2" class="preorder-stage" hidden>
@@ -2182,6 +2228,29 @@
       }
     });
   });
+
+  // Location dropdowns — mobile fallback for the button grids.
+  // The <select> is populated from the existing buttons and just
+  // forwards its choice to the matching button's click handler.
+  function wireLocationSelect(selectId, btnSelector) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+    document.querySelectorAll(btnSelector).forEach(btn => {
+      const opt = document.createElement('option');
+      opt.value = btn.dataset.loc;
+      opt.textContent = btn.textContent.trim();
+      select.appendChild(opt);
+    });
+    select.addEventListener('change', () => {
+      const v = select.value;
+      if (v === '') return;
+      const target = document.querySelector(btnSelector + '[data-loc="' + v + '"]');
+      if (target) target.click();
+      select.value = '';
+    });
+  }
+  wireLocationSelect('location-select', '.location-btn');
+  wireLocationSelect('preorder-select', '.preorder-loc-btn');
 
   // FAQ accordion
   document.querySelectorAll('.faq-q').forEach(btn => {

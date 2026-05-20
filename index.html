@@ -1703,6 +1703,256 @@
     .basket-form-grid { grid-template-columns: 1fr; }
   }
 
+  /* ───── GIFT CARD MODAL ───── */
+  .giftcard-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(31, 26, 20, 0.6);
+    z-index: 260;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .giftcard-backdrop.is-open { opacity: 1; pointer-events: auto; }
+  .giftcard-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -48%) scale(0.97);
+    width: calc(100% - 40px);
+    max-width: 460px;
+    max-height: 88vh;
+    max-height: 88dvh;
+    overflow-y: auto;
+    background: var(--cream);
+    border-radius: 10px;
+    z-index: 270;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.42);
+    padding: 38px 32px 30px;
+  }
+  .giftcard-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .giftcard-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-soft);
+    padding: 6px;
+    line-height: 0;
+    transition: color 0.2s;
+  }
+  .giftcard-close:hover { color: var(--ink); }
+  .giftcard-close svg { width: 20px; height: 20px; }
+  .giftcard-step-head { margin-bottom: 22px; }
+  .giftcard-step-head small {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .giftcard-step-head h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 500;
+  }
+  .giftcard-presets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .gc-preset {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 16px 6px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .gc-preset:hover { border-color: var(--gold); }
+  .gc-preset.selected {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .gc-custom-label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 600;
+    margin-bottom: 22px;
+  }
+  .gc-custom-field {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--white);
+    overflow: hidden;
+  }
+  .gc-custom-field input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    padding: 14px;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    background: transparent;
+    color: var(--ink);
+    -moz-appearance: textfield;
+  }
+  .gc-custom-field input:focus { outline: none; }
+  .gc-custom-field input::-webkit-outer-spin-button,
+  .gc-custom-field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .gc-custom-field span {
+    padding: 0 16px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .gc-error {
+    color: #b3402e;
+    font-size: 13px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .giftcard-modal .btn-primary { width: 100%; justify-content: center; }
+  .gc-back {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gold-dark);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 14px;
+    padding: 4px 0;
+  }
+  .gc-back:hover { color: var(--ink); }
+  .gc-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  .gc-summary span { font-size: 14px; color: var(--ink-soft); }
+  .gc-summary strong {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .gc-methods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .gc-method {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 54px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink);
+    transition: box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .gc-method.active {
+    border-color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--ink);
+  }
+  .gc-method img { height: 22px; width: auto; }
+  .gc-payform label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .gc-payform input {
+    width: 100%;
+    margin-top: 6px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ink);
+  }
+  .gc-payform input:focus { outline: none; border-color: var(--gold); }
+  .gc-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .gc-mp-note {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+    line-height: 1.6;
+  }
+  .gc-demo-note {
+    font-size: 11.5px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 14px;
+    line-height: 1.55;
+  }
+  .gc-done-icon {
+    width: 58px; height: 58px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4px auto 20px;
+  }
+  .gc-done-icon svg { width: 26px; height: 26px; }
+  #gc-step-done { text-align: center; }
+  #gc-step-done h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  #gc-step-done p { color: var(--ink-soft); margin-bottom: 6px; }
+  #gc-step-done .btn-primary { margin-top: 18px; }
+
   /* ───── REVEAL ANIMATION ───── */
   .reveal {
     opacity: 0;
@@ -2109,7 +2359,7 @@
         <h2>Give the gift of <span class="accent">good bread</span></h2>
         <p>A Hart Bageri gift card is good for bread, pastries, cakes and coffee at any of our twelve bakeries — a simple way to share a morning with someone.</p>
         <p>Redeem online or in store. Pick your own amount and add a note to whoever it's for.</p>
-        <a href="mailto:info@hartbageri.com?subject=Gift%20card%20enquiry" class="btn btn-primary">Enquire about gift cards</a>
+        <button type="button" id="giftcard-buy" class="btn btn-primary">Buy gift card</button>
       </div>
       <div class="gift-cards-visual reveal">
         <img src="assets/Gift_card.png" alt="Hart Bageri gift card — good bread, good people" loading="lazy" />
@@ -2196,6 +2446,92 @@
   </form>
 </aside>
 
+<div id="giftcard-backdrop" class="giftcard-backdrop"></div>
+<div id="giftcard-modal" class="giftcard-modal" role="dialog" aria-modal="true" aria-label="Buy a gift card">
+  <button type="button" class="giftcard-close" id="giftcard-close" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+
+  <div class="giftcard-step" id="gc-step-amount">
+    <div class="giftcard-step-head">
+      <small>Gift Card · Step 1 of 2</small>
+      <h3>Choose an amount</h3>
+    </div>
+    <div class="giftcard-presets">
+      <button type="button" class="gc-preset" data-amount="250">250 kr</button>
+      <button type="button" class="gc-preset" data-amount="500">500 kr</button>
+      <button type="button" class="gc-preset" data-amount="1000">1000 kr</button>
+      <button type="button" class="gc-preset" data-amount="1500">1500 kr</button>
+      <button type="button" class="gc-preset" data-amount="2000">2000 kr</button>
+    </div>
+    <label class="gc-custom-label">
+      Or enter your own amount
+      <span class="gc-custom-field">
+        <input type="number" id="gc-custom" min="100" max="5000" step="50" placeholder="100 – 5000" />
+        <span>kr</span>
+      </span>
+    </label>
+    <p class="gc-error" id="gc-amount-error" hidden></p>
+    <button type="button" class="btn btn-primary" id="gc-to-payment">Continue to payment</button>
+  </div>
+
+  <div class="giftcard-step" id="gc-step-payment" hidden>
+    <button type="button" class="gc-back" id="gc-back">← Amount</button>
+    <div class="giftcard-step-head">
+      <small>Gift Card · Step 2 of 2</small>
+      <h3>Payment</h3>
+    </div>
+    <div class="gc-summary">
+      <span>Hart Bageri gift card</span>
+      <strong id="gc-summary-amount">0 kr</strong>
+    </div>
+    <div class="gc-methods">
+      <button type="button" class="gc-method active" data-method="card">Card</button>
+      <button type="button" class="gc-method" data-method="mobilepay">
+        <img src="assets/MobilePay_logo.svg" alt="MobilePay" />
+      </button>
+    </div>
+
+    <div class="gc-payform" id="gc-pay-card">
+      <label>Cardholder name
+        <input type="text" id="gc-card-name" autocomplete="cc-name" placeholder="Name on card" />
+      </label>
+      <label>Card number
+        <input type="text" id="gc-card-number" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="1234 5678 9012 3456" />
+      </label>
+      <div class="gc-form-row">
+        <label>Expiry date
+          <input type="text" id="gc-card-exp" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/YY" />
+        </label>
+        <label>CVV / CVC
+          <input type="text" id="gc-card-cvv" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" />
+        </label>
+      </div>
+    </div>
+
+    <div class="gc-payform" id="gc-pay-mobilepay" hidden>
+      <label>MobilePay phone number
+        <input type="tel" id="gc-mp-phone" placeholder="+45 12 34 56 78" />
+      </label>
+      <p class="gc-mp-note">You'll approve the payment in the MobilePay app on your phone.</p>
+    </div>
+
+    <p class="gc-error" id="gc-pay-error" hidden></p>
+    <button type="button" class="btn btn-primary" id="gc-pay">Pay <span id="gc-pay-amount"></span></button>
+    <p class="gc-demo-note">Demo checkout — this is a simulation. No real payment is processed and no card details are stored or sent anywhere.</p>
+  </div>
+
+  <div class="giftcard-step" id="gc-step-done" hidden>
+    <div class="gc-done-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+    </div>
+    <h3>Thank you</h3>
+    <p>Your <strong id="gc-done-amount"></strong> Hart Bageri gift card is confirmed.</p>
+    <p class="gc-demo-note">This was a demo checkout — nothing was charged.</p>
+    <button type="button" class="btn btn-primary" id="gc-finish">Done</button>
+  </div>
+</div>
+
 <script>
   // Bread cut section — scroll-driven slicing video
   (function () {
@@ -2276,6 +2612,134 @@
       }
     });
   });
+
+  // Gift card purchase — simulated checkout
+  (function () {
+    const modal = document.getElementById('giftcard-modal');
+    const backdrop = document.getElementById('giftcard-backdrop');
+    const openBtn = document.getElementById('giftcard-buy');
+    if (!modal || !backdrop || !openBtn) return;
+
+    const stepAmount  = document.getElementById('gc-step-amount');
+    const stepPayment = document.getElementById('gc-step-payment');
+    const stepDone    = document.getElementById('gc-step-done');
+    const customInput = document.getElementById('gc-custom');
+    const amountError = document.getElementById('gc-amount-error');
+    const payError    = document.getElementById('gc-pay-error');
+    const cardNumber  = document.getElementById('gc-card-number');
+    const cardExp     = document.getElementById('gc-card-exp');
+    const cardCvv     = document.getElementById('gc-card-cvv');
+
+    let amount = 0;
+    let method = 'card';
+    const fmt = n => n + ' kr';
+
+    function showStep(step) {
+      stepAmount.hidden  = step !== 'amount';
+      stepPayment.hidden = step !== 'payment';
+      stepDone.hidden    = step !== 'done';
+      modal.scrollTop = 0;
+    }
+    function openModal() {
+      amount = 0;
+      customInput.value = '';
+      document.querySelectorAll('.gc-preset').forEach(b => b.classList.remove('selected'));
+      amountError.hidden = true;
+      payError.hidden = true;
+      showStep('amount');
+      modal.classList.add('is-open');
+      backdrop.classList.add('is-open');
+    }
+    function closeModal() {
+      modal.classList.remove('is-open');
+      backdrop.classList.remove('is-open');
+    }
+
+    openBtn.addEventListener('click', openModal);
+    document.getElementById('giftcard-close').addEventListener('click', closeModal);
+    backdrop.addEventListener('click', closeModal);
+    document.getElementById('gc-finish').addEventListener('click', closeModal);
+    document.getElementById('gc-back').addEventListener('click', () => showStep('amount'));
+
+    // amount presets
+    document.querySelectorAll('.gc-preset').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.gc-preset').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        amount = parseInt(btn.dataset.amount, 10);
+        customInput.value = '';
+        amountError.hidden = true;
+      });
+    });
+    customInput.addEventListener('input', () => {
+      document.querySelectorAll('.gc-preset').forEach(b => b.classList.remove('selected'));
+      amount = parseInt(customInput.value, 10) || 0;
+      amountError.hidden = true;
+    });
+
+    document.getElementById('gc-to-payment').addEventListener('click', () => {
+      if (!amount || amount < 100 || amount > 5000) {
+        amountError.textContent = 'Please choose an amount between 100 and 5000 kr.';
+        amountError.hidden = false;
+        return;
+      }
+      document.getElementById('gc-summary-amount').textContent = fmt(amount);
+      document.getElementById('gc-pay-amount').textContent = fmt(amount);
+      payError.hidden = true;
+      showStep('payment');
+    });
+
+    // payment method toggle
+    document.querySelectorAll('.gc-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.gc-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        method = btn.dataset.method;
+        document.getElementById('gc-pay-card').hidden = method !== 'card';
+        document.getElementById('gc-pay-mobilepay').hidden = method !== 'mobilepay';
+        payError.hidden = true;
+      });
+    });
+
+    // input formatting
+    cardNumber.addEventListener('input', () => {
+      const digits = cardNumber.value.replace(/\D/g, '').slice(0, 16);
+      cardNumber.value = digits.replace(/(.{4})/g, '$1 ').trim();
+    });
+    cardExp.addEventListener('input', () => {
+      let v = cardExp.value.replace(/\D/g, '').slice(0, 4);
+      if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
+      cardExp.value = v;
+    });
+    cardCvv.addEventListener('input', () => {
+      cardCvv.value = cardCvv.value.replace(/\D/g, '').slice(0, 4);
+    });
+
+    function showPayError(msg) {
+      payError.textContent = msg;
+      payError.hidden = false;
+    }
+
+    document.getElementById('gc-pay').addEventListener('click', () => {
+      if (method === 'card') {
+        const num  = cardNumber.value.replace(/\s/g, '');
+        const exp  = cardExp.value;
+        const cvv  = cardCvv.value;
+        const name = document.getElementById('gc-card-name').value.trim();
+        if (!name)               { showPayError('Please enter the cardholder name.'); return; }
+        if (num.length < 12)     { showPayError('Please enter a valid card number.'); return; }
+        if (!/^\d{2}\/\d{2}$/.test(exp)) { showPayError('Please enter the expiry date as MM/YY.'); return; }
+        const mm = parseInt(exp.slice(0, 2), 10);
+        if (mm < 1 || mm > 12)   { showPayError('Expiry month must be between 01 and 12.'); return; }
+        if (cvv.length < 3)      { showPayError('Please enter the 3–4 digit CVV / CVC.'); return; }
+      } else {
+        const phone = document.getElementById('gc-mp-phone').value.replace(/[^\d]/g, '');
+        if (phone.length < 8)    { showPayError('Please enter your MobilePay phone number.'); return; }
+      }
+      document.getElementById('gc-done-amount').textContent = fmt(amount);
+      showStep('done');
+    });
+  })();
 
   // Location dropdowns — mobile fallback for the button grids.
   // The <select> is populated from the existing buttons and just

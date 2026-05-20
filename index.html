@@ -709,6 +709,37 @@
     .contact-actions { grid-template-columns: 1fr; }
   }
 
+  /* ───── GIFT CARDS ───── */
+  .gift-cards {
+    background: var(--beige);
+    position: relative;
+    overflow: hidden;
+  }
+  .gift-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 70px;
+    align-items: center;
+  }
+  .gift-cards-text h2 { margin-bottom: 20px; }
+  .gift-cards-text p {
+    color: var(--ink-soft);
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .gift-cards-text .btn { margin-top: 18px; }
+  .gift-cards-visual img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+    filter: drop-shadow(0 26px 55px rgba(31, 26, 20, 0.3));
+  }
+  @media (max-width: 880px) {
+    .gift-cards-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+
   /* ───── FAQ ───── */
   .faq { background: var(--cream); }
   .faq-list {
@@ -1719,7 +1750,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
         Visit Us
       </a>
-      <a href="#services" class="btn btn-secondary">View Services</a>
+      <a href="#preorder" class="btn btn-secondary">Pre-order</a>
     </div>
 
     <div class="hero-meta reveal">
@@ -2065,6 +2096,23 @@
 
       <div id="preorder-products" class="preorder-products">
         <!-- product cards rendered by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gift-cards" id="gift-cards">
+  <div class="container">
+    <div class="gift-cards-grid">
+      <div class="gift-cards-text reveal">
+        <div class="eyebrow">Gift Cards</div>
+        <h2>Give the gift of <span class="accent">good bread</span></h2>
+        <p>A Hart Bageri gift card is good for bread, pastries, cakes and coffee at any of our twelve bakeries — a simple way to share a morning with someone.</p>
+        <p>Redeem online or in store. Pick your own amount and add a note to whoever it's for.</p>
+        <a href="mailto:info@hartbageri.com?subject=Gift%20card%20enquiry" class="btn btn-primary">Enquire about gift cards</a>
+      </div>
+      <div class="gift-cards-visual reveal">
+        <img src="assets/Gift_card.png" alt="Hart Bageri gift card — good bread, good people" loading="lazy" />
       </div>
     </div>
   </div>
